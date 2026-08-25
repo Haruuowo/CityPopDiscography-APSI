@@ -1,252 +1,127 @@
 import React from 'react';
-import { X, Disc, Star, Calendar, Music, Sparkles, Award, Tag, Play } from 'lucide-react';
+import { X, Star, Calendar, Music, Sparkles, Zap, Moon, Flame } from 'lucide-react';
 
-export default function AlbumDetailModal({ album, onClose, onPlayTrack }) {
+export default function AlbumDetailModal({ album, onClose, onRecommendThis }) {
   if (!album) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div 
-        className="glass-panel" 
-        style={{ 
-          maxWidth: '850px', 
-          width: '100%', 
-          maxHeight: '90vh', 
-          overflowY: 'auto',
-          position: 'relative',
-          padding: '0',
-          border: '1px solid rgba(0, 242, 254, 0.3)',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8)'
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        
         {/* Close Button */}
-        <button 
-          onClick={onClose}
-          style={{
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            zIndex: 10,
-            background: 'rgba(10, 12, 22, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: '#fff',
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease'
-          }}
-        >
-          <X size={20} />
+        <button onClick={onClose} className="close-btn">
+          <X style={{ width: '18px', height: '18px' }} />
         </button>
 
-        {/* Modal Hero Banner */}
-        <div style={{
-          position: 'relative',
-          padding: '32px',
-          background: album.colorGradient || 'linear-gradient(135deg, #10002b, #240b36)',
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '24px',
-          alignItems: 'center',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}>
-          
-          {/* Cover & Vinyl Artwork visual */}
-          <div style={{ position: 'relative', width: '160px', height: '160px', flexShrink: 0 }}>
-            {/* Spinning vinyl disk in background */}
-            <div style={{
-              position: 'absolute',
-              top: '5px',
-              right: '-25px',
-              width: '150px',
-              height: '150px',
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, #222 25%, #111 26%, #111 40%, #000 41%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 0 15px rgba(0,0,0,0.7)',
-              zIndex: 1
-            }}>
-              <div style={{
-                width: '50px',
-                height: '50px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #ff007f, #00f2fe)',
-                border: '2px solid #000',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <Disc size={16} color="#fff" className="animate-spin-slow" />
-              </div>
+        {/* Top Header */}
+        <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '28px', marginBottom: '28px', paddingBottom: '28px', borderBottom: '1px solid var(--border)' }}>
+          <img
+            src={album.cover}
+            alt={album.title}
+            style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '14px', border: '1px solid var(--bdgold)', boxShadow: '0 12px 30px rgba(0,0,0,0.6)' }}
+          />
+
+          <div>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+              <span className="vibe-tag">★ {album.year} RELEASE</span>
+              <span className="vibe-tag">★ RATING: {album.rating} / 5.0</span>
             </div>
 
-            {/* Album Cover */}
-            <img
-              src={album.coverUrl}
-              alt={album.title}
-              style={{
-                width: '160px',
-                height: '160px',
-                objectFit: 'cover',
-                borderRadius: '12px',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.6)',
-                position: 'relative',
-                zIndex: 2,
-                border: '1px solid rgba(255,255,255,0.2)'
-              }}
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=800&auto=format&fit=crop';
-              }}
-            />
-          </div>
-
-          {/* Album Title & Metadata */}
-          <div style={{ flexGrow: 1, color: '#fff' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <span className="japanese-sub" style={{ fontSize: '0.9rem', color: 'var(--primary-cyan)', fontWeight: 600 }}>
-                {album.artistJapanese} • {album.titleJapanese}
-              </span>
-            </div>
-
-            <h2 style={{ fontSize: '2rem', fontWeight: 900, lineHeight: '1.1', marginBottom: '6px' }}>
+            <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '2.2rem', fontWeight: 800, color: 'var(--white)', marginBottom: '4px' }}>
               {album.title}
             </h2>
 
-            <p style={{ fontSize: '1.1rem', color: '#e2e8f0', marginBottom: '14px', fontWeight: 600 }}>
-              {album.artist}
+            <p style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--gold)', marginBottom: '16px' }}>
+              {album.artist} <span style={{ fontSize: '.85rem', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>({album.artistJp})</span>
             </p>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', marginBottom: '16px' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Calendar size={14} color="var(--primary-cyan)" /> Year: <strong style={{ color: '#fff' }}>{album.year}</strong>
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Award size={14} color="var(--primary-pink)" /> Producer: <strong style={{ color: '#fff' }}>{album.producer}</strong>
-              </span>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Tag size={14} color="var(--accent-gold)" /> Label: <strong style={{ color: '#fff' }}>{album.label}</strong>
-              </span>
+            <p style={{ fontSize: '.9rem', color: 'var(--muted)', lineHeight: '1.7', marginBottom: '20px' }}>
+              {album.synopsis}
+            </p>
+
+            {/* Vibe Breakdown */}
+            <div style={{ background: 'var(--glass)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border)' }}>
+              <div style={{ fontSize: '.75rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--gold)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Sparkles style={{ width: '13px', height: '13px' }} /> ALBUM VIBE BREAKDOWN
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '.75rem', color: 'var(--muted)', marginBottom: '6px' }}>
+                <span style={{ width: '80px', display: 'flex', alignItems: 'center', gap: '4px' }}><Zap style={{ width: '12px', height: '12px' }} /> Funk</span>
+                <div style={{ flexGrow: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', overflow: 'hidden' }}>
+                  <div style={{ width: `${album.vibes.funkiness}%`, height: '100%', background: 'var(--gold)' }} />
+                </div>
+                <span>{album.vibes.funkiness}%</span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '.75rem', color: 'var(--muted)', marginBottom: '6px' }}>
+                <span style={{ width: '80px', display: 'flex', alignItems: 'center', gap: '4px' }}><Flame style={{ width: '12px', height: '12px' }} /> Sunset</span>
+                <div style={{ flexGrow: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', overflow: 'hidden' }}>
+                  <div style={{ width: `${album.vibes.sunsetEnergy}%`, height: '100%', background: 'var(--gold)' }} />
+                </div>
+                <span>{album.vibes.sunsetEnergy}%</span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '.75rem', color: 'var(--muted)' }}>
+                <span style={{ width: '80px', display: 'flex', alignItems: 'center', gap: '4px' }}><Moon style={{ width: '12px', height: '12px' }} /> Night</span>
+                <div style={{ flexGrow: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', overflow: 'hidden' }}>
+                  <div style={{ width: `${album.vibes.nightDrive}%`, height: '100%', background: 'var(--gold)' }} />
+                </div>
+                <span>{album.vibes.nightDrive}%</span>
+              </div>
+
             </div>
 
-            <button 
-              className="btn-primary"
-              onClick={() => onPlayTrack && onPlayTrack(0)}
-              style={{ fontSize: '0.9rem', padding: '8px 18px' }}
-            >
-              <Play size={16} fill="#fff" /> Play Full Album
-            </button>
-
           </div>
-
         </div>
 
-        {/* Body Content */}
-        <div style={{ padding: '28px' }}>
-          
-          {/* Curator Notes */}
-          <div style={{ 
-            background: 'rgba(0, 242, 254, 0.05)', 
-            borderLeft: '4px solid var(--primary-cyan)', 
-            padding: '16px 20px', 
-            borderRadius: '0 12px 12px 0',
-            marginBottom: '28px' 
-          }}>
-            <h4 style={{ fontSize: '0.9rem', color: 'var(--primary-cyan)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <Sparkles size={16} /> Curator Commentary
-            </h4>
-            <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: '1.6' }}>
-              {album.curatorNotes}
-            </p>
-          </div>
+        {/* Tracklist */}
+        <div>
+          <h3 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.2rem', fontWeight: 700, color: 'var(--white)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Music style={{ width: '16px', height: '16px', color: 'var(--gold)' }} /> Tracklist ({album.tracks.length} Songs)
+          </h3>
 
-          {/* Vibe Tags */}
-          <div style={{ marginBottom: '28px' }}>
-            <h4 style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginBottom: '10px' }}>
-              GENRE & MOOD TAGS
-            </h4>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {album.vibes.map((vibe, idx) => (
-                <span key={idx} className="vibe-badge active">
-                  {vibe}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Tracklist Table */}
-          <div>
-            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Music size={18} color="var(--primary-pink)" /> Track Listing ({album.tracks.length} Songs)
-            </h4>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {album.tracks.map((track, idx) => (
-                <div 
-                  key={track.number}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '12px 16px',
-                    borderRadius: '10px',
-                    background: track.highlight ? 'rgba(255, 0, 127, 0.08)' : 'rgba(255, 255, 255, 0.03)',
-                    border: track.highlight ? '1px solid rgba(255, 0, 127, 0.3)' : '1px solid rgba(255, 255, 255, 0.05)',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onClick={() => onPlayTrack && onPlayTrack(idx)}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <span style={{ 
-                      fontFamily: 'var(--font-mono)', 
-                      fontSize: '0.9rem', 
-                      color: track.highlight ? 'var(--primary-pink)' : 'var(--text-muted)',
-                      fontWeight: 700,
-                      minWidth: '24px'
-                    }}>
-                      {String(track.number).padStart(2, '0')}
-                    </span>
-                    <div>
-                      <span style={{ fontWeight: 600, fontSize: '0.95rem', color: track.highlight ? '#fff' : '#e2e8f0' }}>
-                        {track.title}
-                      </span>
-                      {track.highlight && (
-                        <span style={{
-                          marginLeft: '10px',
-                          fontSize: '0.7rem',
-                          padding: '2px 8px',
-                          borderRadius: '10px',
-                          background: 'linear-gradient(135deg, var(--primary-pink), var(--primary-purple))',
-                          color: '#fff',
-                          fontWeight: 700,
-                          textTransform: 'uppercase'
-                        }}>
-                          Fan Favorite
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                      {track.duration}
-                    </span>
-                    <Play size={14} color="var(--primary-cyan)" />
-                  </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '28px' }}>
+            {album.tracks.map((track) => (
+              <div
+                key={track.number}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '10px 16px',
+                  borderRadius: '8px',
+                  background: track.highlight ? 'rgba(232, 217, 184, 0.08)' : 'var(--glass)',
+                  border: '1px solid ' + (track.highlight ? 'var(--bdgold)' : 'var(--border)'),
+                  fontSize: '.85rem'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '.75rem', color: 'var(--darker)', width: '20px' }}>
+                    {String(track.number).padStart(2, '0')}
+                  </span>
+                  <span style={{ fontWeight: 500, color: 'var(--white)' }}>{track.title}</span>
+                  {track.highlight && (
+                    <span className="vibe-tag" style={{ fontSize: '.6rem', padding: '2px 6px' }}>Signature Hit</span>
+                  )}
                 </div>
-              ))}
-            </div>
-
+                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '.75rem', color: 'var(--muted)' }}>{track.duration}</span>
+              </div>
+            ))}
           </div>
+        </div>
 
+        {/* Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
+          <button onClick={onClose} className="btn-line">Close</button>
+          <button
+            onClick={() => {
+              onClose();
+              onRecommendThis(album);
+            }}
+            className="btn-solid"
+          >
+            <Sparkles style={{ width: '14px', height: '14px' }} /> Recommend Album
+          </button>
         </div>
 
       </div>
