@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Disc, Star, ListMusic, Calendar, ChevronRight } from 'lucide-react';
+import { Disc, Star, ListMusic, Calendar, ChevronRight, Play } from 'lucide-react';
 
-export default function AlbumCard({ album, onSelectAlbum }) {
+export default function AlbumCard({ album, onSelectAlbum, onPlayAlbum }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -79,6 +79,38 @@ export default function AlbumCard({ album, onSelectAlbum }) {
           background: 'linear-gradient(to top, rgba(10, 12, 22, 0.95) 0%, transparent 60%)',
           zIndex: 3
         }} />
+
+        {/* Quick Play Floating Button on Hover */}
+        {isHovered && (
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onPlayAlbum) onPlayAlbum(album);
+            }}
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 5,
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #00f2fe, #ff007f)',
+              border: 'none',
+              color: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 0 25px rgba(0, 242, 254, 0.7)',
+              cursor: 'pointer',
+              animation: 'fadeIn 0.2s ease'
+            }}
+            title="Play Album"
+          >
+            <Play size={24} fill="#fff" style={{ marginLeft: '3px' }} />
+          </button>
+        )}
 
         {/* Year & Rating Badges on Cover */}
         <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 4, display: 'flex', gap: '8px' }}>

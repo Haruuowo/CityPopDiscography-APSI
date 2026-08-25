@@ -1,7 +1,7 @@
 import React from 'react';
-import { X, Disc, Star, Calendar, Music, Sparkles, Award, Tag } from 'lucide-react';
+import { X, Disc, Star, Calendar, Music, Sparkles, Award, Tag, Play } from 'lucide-react';
 
-export default function AlbumDetailModal({ album, onClose }) {
+export default function AlbumDetailModal({ album, onClose, onPlayTrack }) {
   if (!album) return null;
 
   return (
@@ -124,9 +124,9 @@ export default function AlbumDetailModal({ album, onClose }) {
               {album.artist}
             </p>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', marginBottom: '16px' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <Calendar size={14} color="var(--primary-cyan)" /> Release Year: <strong style={{ color: '#fff' }}>{album.year}</strong>
+                <Calendar size={14} color="var(--primary-cyan)" /> Year: <strong style={{ color: '#fff' }}>{album.year}</strong>
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <Award size={14} color="var(--primary-pink)" /> Producer: <strong style={{ color: '#fff' }}>{album.producer}</strong>
@@ -135,6 +135,14 @@ export default function AlbumDetailModal({ album, onClose }) {
                 <Tag size={14} color="var(--accent-gold)" /> Label: <strong style={{ color: '#fff' }}>{album.label}</strong>
               </span>
             </div>
+
+            <button 
+              className="btn-primary"
+              onClick={() => onPlayTrack && onPlayTrack(0)}
+              style={{ fontSize: '0.9rem', padding: '8px 18px' }}
+            >
+              <Play size={16} fill="#fff" /> Play Full Album
+            </button>
 
           </div>
 
@@ -180,7 +188,7 @@ export default function AlbumDetailModal({ album, onClose }) {
             </h4>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {album.tracks.map((track) => (
+              {album.tracks.map((track, idx) => (
                 <div 
                   key={track.number}
                   style={{
@@ -191,8 +199,10 @@ export default function AlbumDetailModal({ album, onClose }) {
                     borderRadius: '10px',
                     background: track.highlight ? 'rgba(255, 0, 127, 0.08)' : 'rgba(255, 255, 255, 0.03)',
                     border: track.highlight ? '1px solid rgba(255, 0, 127, 0.3)' : '1px solid rgba(255, 255, 255, 0.05)',
+                    cursor: 'pointer',
                     transition: 'all 0.2s ease'
                   }}
+                  onClick={() => onPlayTrack && onPlayTrack(idx)}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                     <span style={{ 
@@ -225,9 +235,12 @@ export default function AlbumDetailModal({ album, onClose }) {
                     </div>
                   </div>
 
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    {track.duration}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                      {track.duration}
+                    </span>
+                    <Play size={14} color="var(--primary-cyan)" />
+                  </div>
                 </div>
               ))}
             </div>

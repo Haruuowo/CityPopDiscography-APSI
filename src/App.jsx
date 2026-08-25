@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
+import HeroBanner from './components/HeroBanner';
 import FilterBar from './components/FilterBar';
 import AlbumGrid from './components/AlbumGrid';
 import AlbumDetailModal from './components/AlbumDetailModal';
 import RecommendationSection from './components/RecommendationSection';
 import SubmitRecommendationModal from './components/SubmitRecommendationModal';
+import AudioPlayerBar from './components/AudioPlayerBar';
 
 import { INITIAL_ALBUMS } from './data/initialAlbums';
 import { getStoredRecommendations, saveRecommendation } from './utils/storage';
@@ -13,6 +15,7 @@ export default function App() {
   const [albums, setAlbums] = useState(INITIAL_ALBUMS);
   const [recommendations, setRecommendations] = useState([]);
   const [activeTab, setActiveTab] = useState('discography'); // 'discography' | 'recommendations'
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'list'
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,11 +28,44 @@ export default function App() {
   const [selectedAlbumModal, setSelectedAlbumModal] = useState(null);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
+  // Audio Player State
+  const [activeAlbum, setActiveAlbum] = useState(INITIAL_ALBUMS[0]);
+  const [activeTrackIndex, setActiveTrackIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(false);
+
   // Load recommendations on mount
   useEffect(() => {
     const loaded = getStoredRecommendations();
     setRecommendations(loaded);
   }, []);
+
+  // Play a specific album track
+  const handlePlayAlbumTrack = (album, trackIndex = 0) => {
+    setActiveAlbum(album);
+    setActiveTrackIndex(trackIndex);
+    setIsPlaying(true);
+    setShowPlayer(true);
+  };
+
+  // Player handlers
+  const handleTogglePlay = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleNextTrack = () => {
+    if (!activeAlbum || !activeAlbum.tracks) return;
+    const nextIdx = (activeTrackIndex + 1) % activeAlbum.tracks.length;
+    setActiveTrackIndex(nextIdx);
+    setIsPlaying(true);
+  };
+
+  const handlePrevTrack = () => {
+    if (!activeAlbum || !activeAlbum.tracks) return;
+    const prevIdx = (activeTrackIndex - 1 + activeAlbum.tracks.length) % activeAlbum.tracks.length;
+    setActiveTrackIndex(prevIdx);
+    setIsPlaying(true);
+  };
 
   // Derive unique artist list & unique vibes list for filters
   const artistsList = Array.from(new Set(INITIAL_ALBUMS.map(a => a.artist))).sort();
@@ -46,7 +82,6 @@ export default function App() {
 
   // Filter & Sort logic for Albums
   const filteredAlbums = albums.filter(album => {
-    // Search query check
     const matchesSearch = 
       searchQuery === '' ||
       album.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -55,13 +90,8 @@ export default function App() {
       album.artistJapanese.includes(searchQuery) ||
       album.tracks.some(t => t.title.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    // Artist filter check
     const matchesArtist = selectedArtist === 'ALL' || album.artist === selectedArtist;
-
-    // Vibe filter check
     const matchesVibe = selectedVibe === 'ALL' || album.vibes.includes(selectedVibe);
-
-    // Year range check
     const matchesYear = album.year >= yearRange[0] && album.year <= yearRange[1];
 
     return matchesSearch && matchesArtist && matchesVibe && matchesYear;
@@ -80,7 +110,7 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingBottom: showPlayer ? '90px' : '0' }}>
       
       {/* Header Navigation */}
       <Header
@@ -94,6 +124,14 @@ export default function App() {
       {/* Main Container */}
       <main style={{ maxWidth: '1280px', width: '100%', margin: '0 auto', padding: '0 20px', flexGrow: 1 }}>
         
+        {/* Portfolio Hero Banner */}
+        <HeroBanner 
+          totalAlbums={albums.length}
+          onSelectFeatured={() => handlePlayAlbumTrack(INITIAL_ALBUMS[0], 0)}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
+        />
+
         {activeTab === 'discography' ? (
           <>
             {/* Filter Bar */}
@@ -116,17 +154,19 @@ export default function App() {
             {/* Results count banner */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                City Pop Albums <span style={{ fontSize: '0.9rem', color: 'var(--primary-cyan)', fontWeight: 600 }}>({filteredAlbums.length} shown)</span>
+                City Pop Catalog <span style={{ fontSize: '0.9rem', color: 'var(--primary-cyan)', fontWeight: 600 }}>({filteredAlbums.length} albums)</span>
               </h2>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                Click any album for full tracklist & curator notes
+                Click any album card for full case study & tracklist
               </span>
             </div>
 
-            {/* Album Grid */}
+            {/* Album Grid / List */}
             <AlbumGrid
               albums={filteredAlbums}
+              viewMode={viewMode}
               onSelectAlbum={(album) => setSelectedAlbumModal(album)}
+              onPlayAlbum={(album) => handlePlayAlbumTrack(album, 0)}
               onResetFilters={handleResetFilters}
             />
           </>
@@ -164,6 +204,10 @@ export default function App() {
       <AlbumDetailModal
         album={selectedAlbumModal}
         onClose={() => setSelectedAlbumModal(null)}
+        onPlayTrack={(trackIndex) => {
+          handlePlayAlbumTrack(selectedAlbumModal, trackIndex);
+          setSelectedAlbumModal(null);
+        }}
       />
 
       {/* Submit Recommendation Modal */}
@@ -172,6 +216,19 @@ export default function App() {
         onClose={() => setIsSubmitModalOpen(false)}
         onSubmit={handleAddRecommendation}
       />
+
+      {/* Audio Player Bar */}
+      {showPlayer && activeAlbum && activeAlbum.tracks[activeTrackIndex] && (
+        <AudioPlayerBar
+          album={activeAlbum}
+          currentTrack={activeAlbum.tracks[activeTrackIndex]}
+          isPlaying={isPlaying}
+          onTogglePlay={handleTogglePlay}
+          onNextTrack={handleNextTrack}
+          onPrevTrack={handlePrevTrack}
+          onClose={() => setShowPlayer(false)}
+        />
+      )}
 
     </div>
   );
