@@ -1,100 +1,87 @@
-import React from 'react';
-import { Disc, Music, Sparkles, PlusCircle } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Disc3, PlusCircle, Compass, Radio } from 'lucide-react';
 
-export default function Header({ activeTab, setActiveTab, onOpenSubmitModal, albumCount, recommendationCount }) {
+const THEME_META = {
+  dark: { icon: '●', label: 'Night mode' },
+  white: { icon: '○', label: 'Day mode' },
+  sunset: { icon: '◐', label: 'Sunset mode' },
+};
+
+export default function Header({ totalAlbums, totalRecs, onOpenAddRec, theme, setTheme }) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const meta = THEME_META[theme] || THEME_META.dark;
+
+  useEffect(() => {
+    const onClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+
   return (
-    <header className="glass-panel" style={{ borderRadius: '0 0 20px 20px', padding: '20px 32px', marginBottom: '32px', borderTop: 'none' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '20px' }}>
+    <header>
+      {/* Portfolio Style Brand Logo */}
+      <div className="logo">
+        <Disc3 style={{ width: '24px', height: '24px', color: 'var(--gold)' }} className="spin-vinyl" />
+        <span>CITY POP <span className="gold-accent">VAULT</span></span>
+      </div>
+
+      {/* Stats Counter & Actions */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         
-        {/* Logo & Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <div style={{ 
-            width: '52px', 
-            height: '52px', 
-            borderRadius: '50%', 
-            background: 'linear-gradient(135deg, #ff007f, #00f2fe)', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            boxShadow: '0 0 20px rgba(0, 242, 254, 0.4)'
-          }}>
-            <Disc size={30} color="#ffffff" className="animate-spin-slow" />
-          </div>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px' }}>
-              <h1 style={{ fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                <span className="gradient-text">CITY POP</span> ARCHIVE
-              </h1>
-              <span className="japanese-sub" style={{ fontSize: '0.85rem', color: 'var(--primary-cyan)', letterSpacing: '2px' }}>
-                シティーポップ
-              </span>
-            </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-              1970s–1980s Japanese City Pop Discography & Community Recommender
-            </p>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--muted)' }} className="hidden-mobile">
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Compass style={{ width: '14px', height: '14px', color: 'var(--gold)' }} />
+            Albums: <strong style={{ color: 'var(--white)' }}>{totalAlbums}</strong>
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Radio style={{ width: '14px', height: '14px', color: 'var(--gold)' }} />
+            Recs: <strong style={{ color: 'var(--white)' }}>{totalRecs}</strong>
+          </span>
         </div>
 
-        {/* Navigation & Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          
-          {/* Tab Switcher */}
-          <div style={{ 
-            display: 'flex', 
-            background: 'rgba(10, 12, 22, 0.8)', 
-            padding: '4px', 
-            borderRadius: '12px', 
-            border: '1px solid var(--border-color)' 
-          }}>
-            <button
-              onClick={() => setActiveTab('discography')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'discography' ? 'linear-gradient(135deg, var(--primary-pink), var(--primary-purple))' : 'transparent',
-                color: activeTab === 'discography' ? '#fff' : 'var(--text-muted)',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <Music size={16} />
-              Albums ({albumCount})
-            </button>
-
-            <button
-              onClick={() => setActiveTab('recommendations')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: '8px',
-                border: 'none',
-                background: activeTab === 'recommendations' ? 'linear-gradient(135deg, var(--primary-pink), var(--primary-purple))' : 'transparent',
-                color: activeTab === 'recommendations' ? '#fff' : 'var(--text-muted)',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.2s ease'
-              }}
-            >
-              <Sparkles size={16} />
-              Recommendations ({recommendationCount})
-            </button>
-          </div>
-
-          {/* Submit Recommendation Trigger */}
-          <button className="btn-primary" onClick={onOpenSubmitModal}>
-            <PlusCircle size={18} />
-            Submit Album
+        {/* Theme Dropdown Toggle */}
+        <div className={`theme-dropdown ${dropdownOpen ? 'open' : ''}`} ref={dropdownRef}>
+          <button
+            className="theme-dd-toggle"
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDropdownOpen(!dropdownOpen);
+            }}
+          >
+            <span className="theme-dd-icon">{meta.icon}</span>
+            <span className="theme-dd-label">{meta.label}</span>
+            <svg className="theme-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
           </button>
+          <ul className="theme-dd-menu">
+            {Object.entries(THEME_META).map(([key, m]) => (
+              <li
+                key={key}
+                className={`theme-dd-option ${theme === key ? 'active' : ''}`}
+                onClick={() => {
+                  setTheme(key);
+                  setDropdownOpen(false);
+                }}
+              >
+                <span>{m.icon}</span>{m.label}
+              </li>
+            ))}
+          </ul>
         </div>
+
+        {/* Recommend Button */}
+        <button onClick={onOpenAddRec} className="btn-solid">
+          <PlusCircle style={{ width: '14px', height: '14px' }} />
+          <span>Recommend</span>
+        </button>
 
       </div>
     </header>
