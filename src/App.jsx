@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { CITY_POP_ALBUMS, INITIAL_RECOMMENDATIONS } from './data/citypopData';
+import { fetchAlbums, fetchRecommendations, postRecommendation, isSupabaseConfigured } from './lib/supabaseClient';
 import Header from './components/Header';
 import HeroBanner from './components/HeroBanner';
 import FilterBar from './components/FilterBar';
@@ -7,7 +8,8 @@ import AlbumGrid from './components/AlbumGrid';
 import AlbumDetailModal from './components/AlbumDetailModal';
 import Recommendations from './components/Recommendations';
 import AddRecModal from './components/AddRecModal';
-import { Disc3 } from 'lucide-react';
+import AudioPlayerBar from './components/AudioPlayerBar';
+import { Disc3, Database } from 'lucide-react';
 
 export default function App() {
   // Theme state: dark, white, or sunset
@@ -17,6 +19,15 @@ export default function App() {
   useEffect(() => {
     document.body.className = theme === 'dark' ? '' : `theme-${theme}`;
   }, [theme]);
+
+  // Albums state (dynamic from Supabase or fallback to citypopData.js)
+  const [albums, setAlbums] = useState(CITY_POP_ALBUMS);
+  const [dataSource, setDataSource] = useState('local');
+
+  // Audio player state
+  const [activeTrack, setActiveTrack] = useState(null);
+  const [activeAudioAlbum, setActiveAudioAlbum] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,18 +41,29 @@ export default function App() {
   const [isAddRecOpen, setIsAddRecOpen] = useState(false);
   const [prefilledAlbumForRec, setPrefilledAlbumForRec] = useState(null);
 
-  // Recommendations state with localStorage persistence
+  // Recommendations state
   const [recommendations, setRecommendations] = useState(() => {
     const saved = localStorage.getItem('citypop_recommendations');
     if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Failed to parse saved recommendations", e);
-      }
+      try { return JSON.parse(saved); } catch (e) {}
     }
     return INITIAL_RECOMMENDATIONS;
   });
+
+  // Load Supabase Data on mount
+  useEffect(() => {
+    async function loadData() {
+      const albRes = await fetchAlbums();
+      setAlbums(albRes.data);
+      setDataSource(albRes.source);
+
+      const recRes = await fetchRecommendations();
+      if (recRes.data && recRes.data.length > 0) {
+        setRecommendations(recRes.data);
+      }
+    }
+    loadData();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('citypop_recommendations', JSON.stringify(recommendations));
@@ -49,13 +71,13 @@ export default function App() {
 
   // Unique artists list
   const artistsList = useMemo(() => {
-    const list = Array.from(new Set(CITY_POP_ALBUMS.map(a => a.artist)));
+    const list = Array.from(new Set(albums.map(a => a.artist)));
     return list.sort();
-  }, []);
+  }, [albums]);
 
   // Filtered and Sorted Albums
   const filteredAlbums = useMemo(() => {
-    return CITY_POP_ALBUMS.filter(album => {
+    return albums.filter(album => {
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesTitle = album.title.toLowerCase().includes(query);
@@ -84,7 +106,7 @@ export default function App() {
       if (sortBy === 'title-asc') return a.title.localeCompare(b.title);
       return 0;
     });
-  }, [searchQuery, selectedArtist, yearRange, selectedVibe, sortBy]);
+  }, [albums, searchQuery, selectedArtist, yearRange, selectedVibe, sortBy]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -103,8 +125,9 @@ export default function App() {
     setSortBy('rating-desc');
   };
 
-  const handleAddRecommendation = (newRec) => {
+  const handleAddRecommendation = async (newRec) => {
     setRecommendations(prev => [newRec, ...prev]);
+    await postRecommendation(newRec);
   };
 
   const handleOpenRecommendThis = (album) => {
@@ -112,12 +135,45 @@ export default function App() {
     setIsAddRecOpen(true);
   };
 
+  // Track Play handler
+  const handlePlayTrack = (track, album) => {
+    if (activeTrack?.title === track.title && activeAudioAlbum?.id === album.id) {
+      setIsPlaying(!isPlaying);
+    } else {
+      setActiveTrack({ ...track, albumId: album.id });
+      setActiveAudioAlbum(album);
+      setIsPlaying(true);
+    }
+  };
+
+  const handleNextTrack = () => {
+    if (!activeAudioAlbum || !activeTrack) return;
+    const tracks = activeAudioAlbum.tracks;
+    const currentIndex = tracks.findIndex(t => t.title === activeTrack.title);
+    if (currentIndex >= 0 && currentIndex < tracks.length - 1) {
+      const nextT = tracks[currentIndex + 1];
+      setActiveTrack({ ...nextT, albumId: activeAudioAlbum.id });
+      setIsPlaying(true);
+    }
+  };
+
+  const handlePrevTrack = () => {
+    if (!activeAudioAlbum || !activeTrack) return;
+    const tracks = activeAudioAlbum.tracks;
+    const currentIndex = tracks.findIndex(t => t.title === activeTrack.title);
+    if (currentIndex > 0) {
+      const prevT = tracks[currentIndex - 1];
+      setActiveTrack({ ...prevT, albumId: activeAudioAlbum.id });
+      setIsPlaying(true);
+    }
+  };
+
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: activeTrack ? '90px' : '0' }}>
       <div>
         {/* Sticky Header with Theme Switcher */}
         <Header
-          totalAlbums={CITY_POP_ALBUMS.length}
+          totalAlbums={albums.length}
           totalRecs={recommendations.length}
           onOpenAddRec={() => {
             setPrefilledAlbumForRec(null);
@@ -155,17 +211,25 @@ export default function App() {
             activeFilterCount={activeFilterCount}
           />
 
-          {/* Results Summary */}
+          {/* Results & Supabase Data Source Summary */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '24px', marginBottom: '16px', fontSize: '.8rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Disc3 style={{ width: '16px', height: '16px', color: 'var(--gold)' }} />
-              Showing <strong style={{ color: 'var(--white)' }}>{filteredAlbums.length}</strong> of {CITY_POP_ALBUMS.length} Albums
+              Showing <strong style={{ color: 'var(--white)' }}>{filteredAlbums.length}</strong> of {albums.length} Albums
             </span>
-            {activeFilterCount > 0 && (
-              <span className="vibe-tag">
-                {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''} applied
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span className="vibe-tag" style={{ fontSize: '.7rem', display: 'flex', alignItems: 'center', gap: '4px', background: dataSource === 'supabase' ? 'rgba(74, 222, 128, 0.15)' : 'rgba(232, 217, 184, 0.1)' }}>
+                <Database style={{ width: '12px', height: '12px', color: dataSource === 'supabase' ? '#4ade80' : 'var(--gold)' }} />
+                {dataSource === 'supabase' ? 'Supabase DB Live' : 'Local Fallback'}
               </span>
-            )}
+
+              {activeFilterCount > 0 && (
+                <span className="vibe-tag">
+                  {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''} applied
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Album Grid */}
@@ -192,6 +256,9 @@ export default function App() {
         album={selectedAlbum}
         onClose={() => setSelectedAlbum(null)}
         onRecommendThis={handleOpenRecommendThis}
+        onPlayTrack={handlePlayTrack}
+        activeTrack={activeTrack}
+        isPlaying={isPlaying}
       />
 
       <AddRecModal
@@ -202,6 +269,20 @@ export default function App() {
         }}
         initialAlbum={prefilledAlbumForRec}
         onSubmitRecommendation={handleAddRecommendation}
+      />
+
+      {/* Floating Audio Player Bar */}
+      <AudioPlayerBar
+        currentTrack={activeTrack}
+        album={activeAudioAlbum}
+        isPlaying={isPlaying}
+        onTogglePlay={() => setIsPlaying(!isPlaying)}
+        onNextTrack={handleNextTrack}
+        onPrevTrack={handlePrevTrack}
+        onClose={() => {
+          setActiveTrack(null);
+          setIsPlaying(false);
+        }}
       />
 
       {/* Footer */}
