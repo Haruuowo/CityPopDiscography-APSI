@@ -1,92 +1,132 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc, Radio, Sparkles, X } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, X, Disc3 } from 'lucide-react';
 
 export default function AudioPlayerBar({ currentTrack, album, isPlaying, onTogglePlay, onNextTrack, onPrevTrack, onClose }) {
-  const [progress, setProgress] = useState(35);
+  const audioRef = useRef(null);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
 
-  // Simulate progress when playing
+  // Audio preview source (use track previewUrl or high quality sample audio)
+  const audioSrc = currentTrack?.previewUrl || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+
+  // Handle Play / Pause sync with HTML5 Audio element
   useEffect(() => {
-    let interval;
+    if (!audioRef.current) return;
     if (isPlaying) {
-      interval = setInterval(() => {
-        setProgress(prev => (prev >= 100 ? 0 : prev + 0.5));
-      }, 1000);
+      audioRef.current.play().catch(e => console.log('Audio autoplay prevented or error:', e));
+    } else {
+      audioRef.current.pause();
     }
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, audioSrc]);
+
+  // Sync Volume
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : volume / 100;
+    }
+  }, [volume, isMuted]);
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+      setDuration(audioRef.current.duration || 0);
+    }
+  };
+
+  const handleSeek = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const pct = clickX / rect.width;
+    if (audioRef.current && duration) {
+      const newTime = pct * duration;
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const formatTime = (secs) => {
+    if (!secs || isNaN(secs)) return '0:00';
+    const m = Math.floor(secs / 60);
+    const s = Math.floor(secs % 60);
+    return `${m}:${s < 10 ? '0' : ''}${s}`;
+  };
 
   if (!album || !currentTrack) return null;
+
+  const coverUrl = album.cover || album.coverUrl;
+  const progressPct = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
     <div style={{
       position: 'fixed',
-      bottom: '16px',
+      bottom: '20px',
       left: '50%',
       transform: 'translateX(-50%)',
-      width: 'calc(100% - 32px)',
-      maxWidth: '1200px',
-      zIndex: 999,
-      background: 'rgba(12, 16, 32, 0.92)',
+      width: 'calc(100% - 40px)',
+      maxWidth: '1000px',
+      zIndex: 9999,
+      background: 'rgba(15, 18, 30, 0.95)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
-      border: '1px solid rgba(0, 242, 254, 0.3)',
-      borderRadius: '20px',
+      border: '1px solid var(--bdgold)',
+      borderRadius: '16px',
       padding: '12px 24px',
-      boxShadow: '0 16px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 242, 254, 0.15)',
+      boxShadow: '0 20px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(232, 217, 184, 0.15)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      gap: '20px',
-      animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+      gap: '20px'
     }}>
       
+      {/* Hidden HTML5 Audio Element */}
+      <audio
+        ref={audioRef}
+        src={audioSrc}
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={() => onNextTrack && onNextTrack()}
+      />
+
       {/* Track & Album Info */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '240px' }}>
-        {/* Animated Vinyl Thumbnail */}
-        <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '220px' }}>
+        <div style={{ position: 'relative', width: '46px', height: '46px', flexShrink: 0 }}>
           <img 
-            src={album.coverUrl} 
+            src={coverUrl} 
             alt={album.title} 
             style={{ 
-              width: '48px', 
-              height: '48px', 
+              width: '46px', 
+              height: '46px', 
               borderRadius: '8px', 
               objectFit: 'cover',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid var(--border)'
             }} 
           />
-          <div style={{
-            position: 'absolute',
-            inset: -4,
-            borderRadius: '12px',
-            border: isPlaying ? '2px solid var(--primary-cyan)' : 'none',
-            pointerEvents: 'none',
-            boxShadow: isPlaying ? '0 0 10px rgba(0,242,254,0.5)' : 'none'
-          }} />
+          {isPlaying && (
+            <Disc3 
+              style={{
+                position: 'absolute',
+                top: '-4px',
+                right: '-4px',
+                width: '18px',
+                height: '18px',
+                color: 'var(--gold)',
+                animation: 'spin 3s linear infinite'
+              }} 
+            />
+          )}
         </div>
 
         <div style={{ overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ 
-              fontSize: '0.7rem', 
-              padding: '1px 6px', 
-              borderRadius: '4px', 
-              background: 'linear-gradient(135deg, var(--primary-pink), var(--primary-purple))', 
-              color: '#fff', 
-              fontWeight: 700 
-            }}>
+            <span className="vibe-tag" style={{ fontSize: '0.6rem', padding: '1px 6px' }}>
               NOW PLAYING
-            </span>
-            <span className="japanese-sub" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              {album.artistJapanese}
             </span>
           </div>
           <h4 style={{ 
-            fontSize: '0.95rem', 
+            fontSize: '0.9rem', 
             fontWeight: 700, 
-            color: '#fff', 
+            color: 'var(--white)', 
             whiteSpace: 'nowrap', 
             overflow: 'hidden', 
             textOverflow: 'ellipsis',
@@ -94,58 +134,60 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
           }}>
             {currentTrack.title}
           </h4>
-          <p style={{ fontSize: '0.8rem', color: 'var(--primary-cyan)', opacity: 0.9 }}>
-            {album.artist} • <span style={{ color: 'var(--text-muted)' }}>{album.title}</span>
+          <p style={{ fontSize: '0.75rem', color: 'var(--gold)' }}>
+            {album.artist} • <span style={{ color: 'var(--muted)' }}>{album.title}</span>
           </p>
         </div>
       </div>
 
-      {/* Center Controls & Scrubber */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1, maxWidth: '500px', gap: '6px' }}>
+      {/* Center Playback Controls & Scrubber */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1, maxWidth: '440px', gap: '6px' }}>
         
-        {/* Playback Control Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <button 
-            onClick={onPrevTrack}
-            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-            title="Previous Track"
-          >
-            <SkipBack size={18} />
-          </button>
+          {onPrevTrack && (
+            <button 
+              onClick={onPrevTrack}
+              style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', display: 'flex' }}
+              title="Previous Track"
+            >
+              <SkipBack size={16} />
+            </button>
+          )}
 
           <button 
             onClick={onTogglePlay}
             style={{ 
-              width: '40px', 
-              height: '40px', 
+              width: '38px', 
+              height: '38px', 
               borderRadius: '50%', 
-              background: 'linear-gradient(135deg, #00f2fe, #ff007f)', 
+              background: 'var(--gold)', 
               border: 'none', 
-              color: '#fff', 
+              color: '#000', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
               cursor: 'pointer',
-              boxShadow: '0 0 15px rgba(0, 242, 254, 0.4)',
-              transition: 'transform 0.15s ease'
+              boxShadow: '0 0 15px rgba(232, 217, 184, 0.4)'
             }}
             title={isPlaying ? "Pause" : "Play"}
           >
-            {isPlaying ? <Pause size={20} fill="#fff" /> : <Play size={20} fill="#fff" style={{ marginLeft: '2px' }} />}
+            {isPlaying ? <Pause size={18} fill="#000" /> : <Play size={18} fill="#000" style={{ marginLeft: '2px' }} />}
           </button>
 
-          <button 
-            onClick={onNextTrack}
-            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-            title="Next Track"
-          >
-            <SkipForward size={18} />
-          </button>
+          {onNextTrack && (
+            <button 
+              onClick={onNextTrack}
+              style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', display: 'flex' }}
+              title="Next Track"
+            >
+              <SkipForward size={16} />
+            </button>
+          )}
         </div>
 
-        {/* Progress Slider Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', fontSize: '0.75rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-          <span>1:24</span>
+        {/* Progress Slider */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%', fontSize: '0.7rem', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+          <span>{formatTime(currentTime)}</span>
           <div 
             style={{ 
               flexGrow: 1, 
@@ -155,16 +197,12 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
               position: 'relative', 
               cursor: 'pointer' 
             }}
-            onClick={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const clickX = e.clientX - rect.left;
-              setProgress((clickX / rect.width) * 100);
-            }}
+            onClick={handleSeek}
           >
             <div style={{ 
-              width: `${progress}%`, 
+              width: `${progressPct}%`, 
               height: '100%', 
-              background: 'linear-gradient(90deg, #00f2fe, #ff007f)', 
+              background: 'var(--gold)', 
               borderRadius: '2px',
               position: 'relative'
             }}>
@@ -176,24 +214,24 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
                 height: '10px',
                 borderRadius: '50%',
                 background: '#fff',
-                boxShadow: '0 0 6px rgba(0,242,254,0.8)'
+                boxShadow: '0 0 6px var(--gold)'
               }} />
             </div>
           </div>
-          <span>{currentTrack.duration || "4:15"}</span>
+          <span>{duration ? formatTime(duration) : (currentTrack.duration || '0:00')}</span>
         </div>
 
       </div>
 
-      {/* Right Controls: Volume & Dismiss */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '160px', justifyContent: 'flex-end' }}>
+      {/* Right Volume & Close Controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '140px', justifyContent: 'flex-end' }}>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button 
             onClick={() => setIsMuted(!isMuted)} 
-            style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer' }}
           >
-            {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
           </button>
 
           <input 
@@ -203,8 +241,8 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
             value={isMuted ? 0 : volume} 
             onChange={(e) => setVolume(Number(e.target.value))}
             style={{ 
-              width: '70px', 
-              accentColor: 'var(--primary-cyan)', 
+              width: '60px', 
+              accentColor: 'var(--gold)', 
               cursor: 'pointer' 
             }} 
           />
@@ -215,10 +253,10 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
           style={{ 
             background: 'rgba(255,255,255,0.08)', 
             border: 'none', 
-            color: 'var(--text-muted)', 
+            color: 'var(--muted)', 
             borderRadius: '50%', 
-            width: '28px', 
-            height: '28px', 
+            width: '26px', 
+            height: '26px', 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center', 

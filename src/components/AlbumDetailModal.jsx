@@ -1,7 +1,7 @@
 import React from 'react';
-import { X, Star, Calendar, Music, Sparkles, Zap, Moon, Flame } from 'lucide-react';
+import { X, Star, Calendar, Music, Sparkles, Zap, Moon, Flame, Play, Pause } from 'lucide-react';
 
-export default function AlbumDetailModal({ album, onClose, onRecommendThis }) {
+export default function AlbumDetailModal({ album, onClose, onRecommendThis, onPlayTrack, activeTrack, isPlaying }) {
   if (!album) return null;
 
   return (
@@ -81,34 +81,66 @@ export default function AlbumDetailModal({ album, onClose, onRecommendThis }) {
           </h3>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '28px' }}>
-            {album.tracks.map((track) => (
-              <div
-                key={track.number}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '10px 16px',
-                  borderRadius: '8px',
-                  background: track.highlight ? 'rgba(232, 217, 184, 0.08)' : 'var(--glass)',
-                  border: '1px solid ' + (track.highlight ? 'var(--bdgold)' : 'var(--border)'),
-                  fontSize: '.85rem'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '.75rem', color: 'var(--darker)', width: '20px' }}>
-                    {String(track.number).padStart(2, '0')}
-                  </span>
-                  <span style={{ fontWeight: 500, color: 'var(--white)' }}>{track.title}</span>
-                  {track.highlight && (
-                    <span className="vibe-tag" style={{ fontSize: '.6rem', padding: '2px 6px' }}>Signature Hit</span>
-                  )}
+            {album.tracks.map((track) => {
+              const isCurrentPlayingTrack = activeTrack?.title === track.title && activeTrack?.albumId === album.id;
+              
+              return (
+                <div
+                  key={track.number}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '10px 16px',
+                    borderRadius: '8px',
+                    background: track.highlight ? 'rgba(232, 217, 184, 0.08)' : 'var(--glass)',
+                    border: '1px solid ' + (track.highlight ? 'var(--bdgold)' : 'var(--border)'),
+                    fontSize: '.85rem',
+                    transition: 'border-color 0.2s ease'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {/* Play Button */}
+                    <button
+                      onClick={() => onPlayTrack && onPlayTrack(track, album)}
+                      style={{
+                        width: '28px',
+                        height: '28px',
+                        borderRadius: '50%',
+                        background: isCurrentPlayingTrack ? 'var(--gold)' : 'rgba(255, 255, 255, 0.1)',
+                        border: 'none',
+                        color: isCurrentPlayingTrack ? '#000' : 'var(--white)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease'
+                      }}
+                      title="Play Preview"
+                    >
+                      {isCurrentPlayingTrack && isPlaying ? (
+                        <Pause size={12} fill="#000" />
+                      ) : (
+                        <Play size={12} fill={isCurrentPlayingTrack ? "#000" : "var(--white)"} style={{ marginLeft: '1px' }} />
+                      )}
+                    </button>
+
+                    <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '.75rem', color: 'var(--darker)', width: '20px' }}>
+                      {String(track.number).padStart(2, '0')}
+                    </span>
+                    <span style={{ fontWeight: 500, color: 'var(--white)' }}>{track.title}</span>
+                    {track.highlight && (
+                      <span className="vibe-tag" style={{ fontSize: '.6rem', padding: '2px 6px' }}>Signature Hit</span>
+                    )}
+                  </div>
+
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '.75rem', color: 'var(--muted)' }}>{track.duration}</span>
                 </div>
-                <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '.75rem', color: 'var(--muted)' }}>{track.duration}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
+
 
         {/* Actions */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '20px', borderTop: '1px solid var(--border)' }}>
