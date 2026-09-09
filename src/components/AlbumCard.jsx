@@ -1,7 +1,15 @@
 import React from 'react';
 import { Star, Music2, Disc } from 'lucide-react';
+import { getAuthenticCoverUrl } from '../utils/audioResolver';
 
 export default function AlbumCard({ album, onSelectAlbum }) {
+  const coverUrl = getAuthenticCoverUrl(album);
+
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ac/25/fc/ac25fc82-aeff-f192-581a-e78e5bfba347/1963623486547_cover.png/600x600bb.jpg';
+  };
+
   return (
     <div onClick={() => onSelectAlbum(album)} className="album-card">
       <div>
@@ -11,7 +19,11 @@ export default function AlbumCard({ album, onSelectAlbum }) {
             <div className="vinyl-center" />
           </div>
 
-          <img src={album.cover} alt={album.title} />
+          <img 
+            src={coverUrl} 
+            alt={album.title} 
+            onError={handleImageError} 
+          />
 
           {/* Gold Badge */}
           <div className="badge-gold">

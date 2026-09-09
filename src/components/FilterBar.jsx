@@ -81,24 +81,25 @@ export default function FilterBar({
 
       </div>
 
-      {/* Year Range Slider Row */}
-      <div className="filter-sub-row" style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '20px', justifyContent: 'space-between' }}>
+      {/* Year Range Slider & Vibe Pills Sub-Rows */}
+      <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: '.75rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--gold)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, letterSpacing: '.06em' }}>
+        {/* Row 1: ERA Range Slider */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+          <span style={{ fontSize: '.78rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--gold)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600, letterSpacing: '.06em' }}>
             <Calendar style={{ width: '14px', height: '14px' }} />
-            ERA: {yearRange[0]} – {yearRange[1]}
+            RELEASE ERA: <span style={{ color: 'var(--white)' }}>{yearRange[0]} – {yearRange[1]}</span>
           </span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '.7rem', color: 'var(--faint)', fontFamily: 'JetBrains Mono, monospace' }}>1975</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--glass)', padding: '6px 16px', borderRadius: '20px', border: '1px solid var(--border)' }}>
+            <span style={{ fontSize: '.7rem', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>1975</span>
             <input
               type="range"
               min="1975"
               max="1990"
               value={yearRange[0]}
               onChange={(e) => setYearRange([parseInt(e.target.value), Math.max(parseInt(e.target.value), yearRange[1])])}
-              style={{ accentColor: 'var(--gold)', width: '90px', cursor: 'pointer' }}
+              style={{ accentColor: 'var(--gold)', width: '100px', cursor: 'pointer' }}
             />
             <span style={{ fontSize: '.7rem', color: 'var(--muted)' }}>to</span>
             <input
@@ -107,17 +108,17 @@ export default function FilterBar({
               max="1990"
               value={yearRange[1]}
               onChange={(e) => setYearRange([Math.min(parseInt(e.target.value), yearRange[0]), parseInt(e.target.value)])}
-              style={{ accentColor: 'var(--gold)', width: '90px', cursor: 'pointer' }}
+              style={{ accentColor: 'var(--gold)', width: '100px', cursor: 'pointer' }}
             />
-            <span style={{ fontSize: '.7rem', color: 'var(--faint)', fontFamily: 'JetBrains Mono, monospace' }}>1990</span>
+            <span style={{ fontSize: '.7rem', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>1990</span>
           </div>
         </div>
 
-        {/* Vibe Pills */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center' }}>
-          <span style={{ fontSize: '.72rem', color: 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: '4px', marginRight: '4px', textTransform: 'uppercase', letterSpacing: '.08em', fontWeight: 500 }}>
-            <Sparkles style={{ width: '12px', height: '12px', color: 'var(--gold)' }} />
-            Vibe:
+        {/* Row 2: Vibe Filter Pills */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
+          <span style={{ fontSize: '.75rem', color: 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: '6px', marginRight: '6px', textTransform: 'uppercase', letterSpacing: '.08em', fontWeight: 600 }}>
+            <Sparkles style={{ width: '13px', height: '13px', color: 'var(--gold)' }} />
+            VIBE FILTER:
           </span>
           {ALL_VIBE_TAGS.map((tag) => (
             <button

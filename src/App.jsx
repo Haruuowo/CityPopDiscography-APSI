@@ -10,6 +10,7 @@ import Recommendations from './components/Recommendations';
 import AddRecModal from './components/AddRecModal';
 import AudioPlayerBar from './components/AudioPlayerBar';
 import { Disc3, Database } from 'lucide-react';
+import { getTrackAudioPreview } from './utils/audioResolver';
 
 export default function App() {
   // Theme state: dark, white, or sunset
@@ -135,14 +136,30 @@ export default function App() {
     setIsAddRecOpen(true);
   };
 
-  // Track Play handler
-  const handlePlayTrack = (track, album) => {
+  // Track Play handler with automatic iTunes & Spotify audio resolution
+  const handlePlayTrack = async (track, album) => {
     if (activeTrack?.title === track.title && activeAudioAlbum?.id === album.id) {
       setIsPlaying(!isPlaying);
     } else {
+      // Set initial playing state
       setActiveTrack({ ...track, albumId: album.id });
       setActiveAudioAlbum(album);
       setIsPlaying(true);
+
+      // Dynamically fetch 30s MP3 preview and Spotify link via free public API
+      const resolved = await getTrackAudioPreview(track.title, album.artist);
+      if (resolved && resolved.previewUrl) {
+        setActiveTrack(prev => {
+          if (prev?.title === track.title) {
+            return {
+              ...prev,
+              previewUrl: resolved.previewUrl,
+              spotifySearchUrl: resolved.spotifySearchUrl
+            };
+          }
+          return prev;
+        });
+      }
     }
   };
 

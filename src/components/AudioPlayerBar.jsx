@@ -8,8 +8,8 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
 
-  // Audio preview source (use track previewUrl or high quality sample audio)
-  const audioSrc = currentTrack?.previewUrl || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+  // Audio preview source (use track previewUrl directly)
+  const audioSrc = currentTrack?.previewUrl || null;
 
   // Handle Play / Pause sync with HTML5 Audio element
   useEffect(() => {
@@ -223,9 +223,33 @@ export default function AudioPlayerBar({ currentTrack, album, isPlaying, onToggl
 
       </div>
 
-      {/* Right Volume & Close Controls */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: '140px', justifyContent: 'flex-end' }}>
+      {/* Right Volume & Spotify Link & Close Controls */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '180px', justifyContent: 'flex-end' }}>
         
+        {/* Open on Spotify Button */}
+        {currentTrack.spotifySearchUrl && (
+          <a 
+            href={currentTrack.spotifySearchUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="vibe-tag"
+            style={{ 
+              fontSize: '0.65rem', 
+              padding: '4px 10px', 
+              background: 'rgba(30, 215, 96, 0.15)', 
+              color: '#1ed760', 
+              border: '1px solid rgba(30, 215, 96, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              textDecoration: 'none'
+            }}
+            title="Open track on Spotify"
+          >
+            <span>Spotify ↗</span>
+          </a>
+        )}
+
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button 
             onClick={() => setIsMuted(!isMuted)} 

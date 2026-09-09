@@ -1,8 +1,16 @@
 import React from 'react';
 import { X, Star, Calendar, Music, Sparkles, Zap, Moon, Flame, Play, Pause } from 'lucide-react';
+import { getAuthenticCoverUrl } from '../utils/audioResolver';
 
 export default function AlbumDetailModal({ album, onClose, onRecommendThis, onPlayTrack, activeTrack, isPlaying }) {
   if (!album) return null;
+
+  const coverUrl = getAuthenticCoverUrl(album);
+
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.src = 'https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ac/25/fc/ac25fc82-aeff-f192-581a-e78e5bfba347/1963623486547_cover.png/600x600bb.jpg';
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -16,8 +24,9 @@ export default function AlbumDetailModal({ album, onClose, onRecommendThis, onPl
         {/* Top Header */}
         <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '28px', marginBottom: '28px', paddingBottom: '28px', borderBottom: '1px solid var(--border)' }}>
           <img
-            src={album.cover}
+            src={coverUrl}
             alt={album.title}
+            onError={handleImageError}
             style={{ width: '100%', aspectRatio: '1/1', objectFit: 'cover', borderRadius: '14px', border: '1px solid var(--bdgold)', boxShadow: '0 12px 30px rgba(0,0,0,0.6)' }}
           />
 

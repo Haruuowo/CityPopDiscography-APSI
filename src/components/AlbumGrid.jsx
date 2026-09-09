@@ -9,7 +9,7 @@ export default function AlbumGrid({ albums, onSelectAlbum, onResetFilters }) {
         <Disc className="w-16 h-16 text-[#606885] mx-auto mb-4 animate-bounce" />
         <h3 className="title-display text-2xl font-bold text-white mb-2">No City Pop Albums Found</h3>
         <p className="text-sm text-[#9BA3BD] mb-6">
-          No albums matched your current search filters or era selections. Try resetting filters or searching for another artist like Tatsuro Yamashita or Mariya Takeuchi.
+          No albums matched your current search filters or era selections. Try resetting filters or searching for another artist like Taeko Ohnuki or Anri.
         </p>
         <button onClick={onResetFilters} className="btn-primary mx-auto">
           <RotateCcw className="w-4 h-4" /> Reset All Filters
@@ -19,7 +19,7 @@ export default function AlbumGrid({ albums, onSelectAlbum, onResetFilters }) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
+    <div className="album-grid">
       {albums.map((album) => (
         <AlbumCard
           key={album.id}
