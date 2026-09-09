@@ -97,7 +97,7 @@ export default function AddRecModal({ isOpen, onClose, initialAlbum, onSubmitRec
               <input
                 type="text"
                 required
-                placeholder="e.g. Tatsuro Yamashita"
+                placeholder="e.g. Taeko Ohnuki"
                 value={formData.artist}
                 onChange={(e) => setFormData({ ...formData, artist: e.target.value })}
                 className="inp-glass"

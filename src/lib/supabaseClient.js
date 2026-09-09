@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { CITY_POP_ALBUMS, INITIAL_RECOMMENDATIONS } from '../data/citypopData';
+import { getAuthenticCoverUrl } from '../utils/audioResolver';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 // Check if Supabase keys are provided and non-placeholder
 export const isSupabaseConfigured = () => {
@@ -40,7 +41,7 @@ export async function fetchAlbums() {
 
     const { data: tracksData } = await supabase.from('tracks').select('*');
 
-    // Format Supabase data into local schema
+    // Format Supabase data into local schema with authentic vinyl artwork
     const formattedAlbums = albumsData.map((album) => {
       const albumTracks = (tracksData || [])
         .filter((t) => t.album_id === album.id)
@@ -54,6 +55,9 @@ export async function fetchAlbums() {
           spotifyTrackId: t.spotify_track_id,
         }));
 
+      const rawCover = album.cover_url || album.cover;
+      const authenticCover = getAuthenticCoverUrl({ id: album.id, title: album.title, cover: rawCover });
+
       return {
         id: album.id,
         title: album.title,
@@ -61,7 +65,7 @@ export async function fetchAlbums() {
         artistJp: album.artist_jp || '',
         year: album.year,
         genre: album.genre || [],
-        cover: album.cover_url,
+        cover: authenticCover,
         rating: Number(album.rating),
         reviewsCount: album.reviews_count || 100,
         synopsis: album.synopsis || '',

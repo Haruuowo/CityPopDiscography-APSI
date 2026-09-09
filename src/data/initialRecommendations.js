@@ -6,7 +6,7 @@ export const INITIAL_RECOMMENDATIONS = [
     year: 1981,
     vibe: "Midnight Drive",
     submittedBy: "TokyoVinylHunter",
-    reason: "If you like Tatsuro Yamashita, this is an essential hidden gem. 'Love Was Really Gone' and 'First Light' have incredible synth grooves and AOR guitar work.",
+    reason: "An essential hidden gem in late 70s / early 80s AOR city pop. 'Love Was Really Gone' and 'First Light' have incredible synth grooves and guitar work.",
     tags: ["AOR", "Boogie", "Guitar Solos"],
     createdAt: "2026-08-20"
   },
