@@ -33,7 +33,6 @@ export default function App() {
   // Filter states
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArtist, setSelectedArtist] = useState('All Artists');
-  const [yearRange, setYearRange] = useState([1975, 1990]);
   const [selectedVibe, setSelectedVibe] = useState('All Vibes');
   const [sortBy, setSortBy] = useState('rating-desc');
 
@@ -91,10 +90,6 @@ export default function App() {
         return false;
       }
 
-      if (album.year < yearRange[0] || album.year > yearRange[1]) {
-        return false;
-      }
-
       if (selectedVibe !== 'All Vibes' && !album.genre.includes(selectedVibe)) {
         return false;
       }
@@ -107,21 +102,19 @@ export default function App() {
       if (sortBy === 'title-asc') return a.title.localeCompare(b.title);
       return 0;
     });
-  }, [albums, searchQuery, selectedArtist, yearRange, selectedVibe, sortBy]);
+  }, [albums, searchQuery, selectedArtist, selectedVibe, sortBy]);
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
     if (searchQuery.trim()) count++;
     if (selectedArtist !== 'All Artists') count++;
-    if (yearRange[0] !== 1975 || yearRange[1] !== 1990) count++;
     if (selectedVibe !== 'All Vibes') count++;
     return count;
-  }, [searchQuery, selectedArtist, yearRange, selectedVibe]);
+  }, [searchQuery, selectedArtist, selectedVibe]);
 
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedArtist('All Artists');
-    setYearRange([1975, 1990]);
     setSelectedVibe('All Vibes');
     setSortBy('rating-desc');
   };
@@ -147,7 +140,7 @@ export default function App() {
       setIsPlaying(true);
 
       // Dynamically fetch 30s MP3 preview and Spotify link via free public API
-      const resolved = await getTrackAudioPreview(track.title, album.artist);
+      const resolved = await getTrackAudioPreview(track.title, album.artist, album.title, track.number);
       if (resolved && resolved.previewUrl) {
         setActiveTrack(prev => {
           if (prev?.title === track.title) {
@@ -218,8 +211,6 @@ export default function App() {
             selectedArtist={selectedArtist}
             setSelectedArtist={setSelectedArtist}
             artistsList={artistsList}
-            yearRange={yearRange}
-            setYearRange={setYearRange}
             selectedVibe={selectedVibe}
             setSelectedVibe={setSelectedVibe}
             sortBy={sortBy}
@@ -302,18 +293,7 @@ export default function App() {
         }}
       />
 
-      {/* Footer */}
-      <footer>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Disc3 style={{ width: '16px', height: '16px', color: 'var(--gold)' }} />
-          <span style={{ fontFamily: 'Syne, sans-serif', color: 'var(--white)', fontWeight: 700 }}>CITY POP VAULT</span>
-          <span style={{ color: 'var(--darker)' }}>| Tokyo 1975–1990 Discography</span>
-        </div>
 
-        <span>
-          Designed in John Harold Doton Portfolio Style
-        </span>
-      </footer>
 
     </div>
   );

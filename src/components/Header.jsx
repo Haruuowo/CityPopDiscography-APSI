@@ -25,25 +25,16 @@ export default function Header({ totalAlbums, totalRecs, onOpenAddRec, theme, se
 
   return (
     <header>
-      {/* Portfolio Style Brand Logo */}
-      <div className="logo">
-        <Disc3 style={{ width: '24px', height: '24px', color: 'var(--gold)' }} className="spin-vinyl" />
+      {/* Brand Logo */}
+      <div className="logo cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <Disc3 style={{ width: '24px', height: '24px', color: 'var(--gold)' }} />
         <span>CITY POP <span className="gold-accent">VAULT</span></span>
       </div>
 
-      {/* Stats Counter & Actions */}
+      {/* Stats Counter & Theme Selector */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--muted)' }} className="hidden-mobile">
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Compass style={{ width: '14px', height: '14px', color: 'var(--gold)' }} />
-            Albums: <strong style={{ color: 'var(--white)' }}>{totalAlbums}</strong>
-          </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <Radio style={{ width: '14px', height: '14px', color: 'var(--gold)' }} />
-            Recs: <strong style={{ color: 'var(--white)' }}>{totalRecs}</strong>
-          </span>
-        </div>
+
 
         {/* Theme Dropdown Toggle */}
         <div className={`theme-dropdown ${dropdownOpen ? 'open' : ''}`} ref={dropdownRef}>

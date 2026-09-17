@@ -48,38 +48,6 @@ export default function AlbumDetailModal({ album, onClose, onRecommendThis, onPl
               {album.synopsis}
             </p>
 
-            {/* Vibe Breakdown */}
-            <div style={{ background: 'var(--glass)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border)' }}>
-              <div style={{ fontSize: '.75rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--gold)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Sparkles style={{ width: '13px', height: '13px' }} /> ALBUM VIBE BREAKDOWN
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '.75rem', color: 'var(--muted)', marginBottom: '6px' }}>
-                <span style={{ width: '80px', display: 'flex', alignItems: 'center', gap: '4px' }}><Zap style={{ width: '12px', height: '12px' }} /> Funk</span>
-                <div style={{ flexGrow: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', overflow: 'hidden' }}>
-                  <div style={{ width: `${album.vibes.funkiness}%`, height: '100%', background: 'var(--gold)' }} />
-                </div>
-                <span>{album.vibes.funkiness}%</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '.75rem', color: 'var(--muted)', marginBottom: '6px' }}>
-                <span style={{ width: '80px', display: 'flex', alignItems: 'center', gap: '4px' }}><Flame style={{ width: '12px', height: '12px' }} /> Sunset</span>
-                <div style={{ flexGrow: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', overflow: 'hidden' }}>
-                  <div style={{ width: `${album.vibes.sunsetEnergy}%`, height: '100%', background: 'var(--gold)' }} />
-                </div>
-                <span>{album.vibes.sunsetEnergy}%</span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '.75rem', color: 'var(--muted)' }}>
-                <span style={{ width: '80px', display: 'flex', alignItems: 'center', gap: '4px' }}><Moon style={{ width: '12px', height: '12px' }} /> Night</span>
-                <div style={{ flexGrow: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,.1)', overflow: 'hidden' }}>
-                  <div style={{ width: `${album.vibes.nightDrive}%`, height: '100%', background: 'var(--gold)' }} />
-                </div>
-                <span>{album.vibes.nightDrive}%</span>
-              </div>
-
-            </div>
-
           </div>
         </div>
 

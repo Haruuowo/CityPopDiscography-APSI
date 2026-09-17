@@ -13,19 +13,15 @@ export default function AlbumCard({ album, onSelectAlbum }) {
   return (
     <div onClick={() => onSelectAlbum(album)} className="album-card">
       <div>
-        {/* Artwork + Spinning Vinyl Overlay */}
+        {/* Artwork */}
         <div className="album-media-box">
-          <div className="vinyl-record-overlay spin-vinyl">
-            <div className="vinyl-center" />
-          </div>
-
           <img 
             src={coverUrl} 
             alt={album.title} 
             onError={handleImageError} 
           />
 
-          {/* Gold Badge */}
+          {/* Year & Rating Badge */}
           <div className="badge-gold">
             ★ {album.year} · {album.rating}
           </div>
@@ -49,7 +45,7 @@ export default function AlbumCard({ album, onSelectAlbum }) {
       </div>
 
       {/* Footer */}
-      <div style={{ padding: '12px 24px', background: 'rgba(0,0,0,0.3)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '.75rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>
+      <div style={{ padding: '10px 16px', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '.75rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <Music2 style={{ width: '13px', height: '13px', color: 'var(--gold)' }} />
           {album.tracks.length} tracks
