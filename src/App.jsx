@@ -5,11 +5,12 @@ import Header from './components/Header';
 import HeroBanner from './components/HeroBanner';
 import FilterBar from './components/FilterBar';
 import AlbumGrid from './components/AlbumGrid';
+import AlbumCard from './components/AlbumCard';
 import AlbumDetailModal from './components/AlbumDetailModal';
 import Recommendations from './components/Recommendations';
 import AddRecModal from './components/AddRecModal';
 import AudioPlayerBar from './components/AudioPlayerBar';
-import { Disc3, Database } from 'lucide-react';
+import { Disc3, Database, Sparkles } from 'lucide-react';
 import { getTrackAudioPreview } from './utils/audioResolver';
 
 export default function App() {
@@ -75,6 +76,11 @@ export default function App() {
     return list.sort();
   }, [albums]);
 
+  // Featured 4 Recommendations for "This week's Recommendation!" section
+  const featuredWeeklyAlbums = useMemo(() => {
+    return albums.slice(0, 4);
+  }, [albums]);
+
   // Filtered and Sorted Albums
   const filteredAlbums = useMemo(() => {
     return albums.filter(album => {
@@ -134,12 +140,10 @@ export default function App() {
     if (activeTrack?.title === track.title && activeAudioAlbum?.id === album.id) {
       setIsPlaying(!isPlaying);
     } else {
-      // Set initial playing state
       setActiveTrack({ ...track, albumId: album.id });
       setActiveAudioAlbum(album);
       setIsPlaying(true);
 
-      // Dynamically fetch 30s MP3 preview and Spotify link via free public API
       const resolved = await getTrackAudioPreview(track.title, album.artist, album.title, track.number);
       if (resolved && resolved.previewUrl) {
         setActiveTrack(prev => {
@@ -181,7 +185,7 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', paddingBottom: activeTrack ? '90px' : '0' }}>
       <div>
-        {/* Sticky Header with Theme Switcher */}
+        {/* Sticky Header */}
         <Header
           totalAlbums={albums.length}
           totalRecs={recommendations.length}
@@ -193,7 +197,7 @@ export default function App() {
           setTheme={setTheme}
         />
 
-        {/* Hero Section */}
+        {/* Hero Banner with Contact Box */}
         <HeroBanner
           onOpenAddRec={() => {
             setPrefilledAlbumForRec(null);
@@ -201,63 +205,111 @@ export default function App() {
           }}
         />
 
-        {/* Main Content */}
-        <main className="container">
+        {/* Main Page Container */}
+        <main className="container page-content-container">
           
-          {/* Floating Filter Card */}
-          <FilterBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            selectedArtist={selectedArtist}
-            setSelectedArtist={setSelectedArtist}
-            artistsList={artistsList}
-            selectedVibe={selectedVibe}
-            setSelectedVibe={setSelectedVibe}
-            sortBy={sortBy}
-            setSortBy={setSortBy}
-            onResetFilters={handleResetFilters}
-            activeFilterCount={activeFilterCount}
-          />
+          {/* SECTION 1: This week's Recommendation! */}
+          <section className="discography-section-block">
+            <div className="section-ribbon">
+              This week's Recommendation!
+            </div>
 
-          {/* Results & Supabase Data Source Summary */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '24px', marginBottom: '16px', fontSize: '.8rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Disc3 style={{ width: '16px', height: '16px', color: 'var(--gold)' }} />
-              Showing <strong style={{ color: 'var(--white)' }}>{filteredAlbums.length}</strong> of {albums.length} Albums
-            </span>
+            <div className="album-grid-4col">
+              {featuredWeeklyAlbums.map((album) => (
+                <AlbumCard
+                  key={`weekly-${album.id}`}
+                  album={album}
+                  onSelectAlbum={setSelectedAlbum}
+                />
+              ))}
+            </div>
+          </section>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <span className="vibe-tag" style={{ fontSize: '.7rem', display: 'flex', alignItems: 'center', gap: '4px', background: dataSource === 'supabase' ? 'rgba(74, 222, 128, 0.15)' : 'rgba(232, 217, 184, 0.1)' }}>
-                <Database style={{ width: '12px', height: '12px', color: dataSource === 'supabase' ? '#4ade80' : 'var(--gold)' }} />
-                {dataSource === 'supabase' ? 'Supabase DB Live' : 'Local Fallback'}
+          {/* SECTION 2: All time Favorites & Full Discography */}
+          <section id="discography-section" className="discography-section-block">
+            <div className="section-ribbon">
+              All time Favorites
+            </div>
+
+            {/* Filter Bar Controls */}
+            <FilterBar
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              selectedArtist={selectedArtist}
+              setSelectedArtist={setSelectedArtist}
+              artistsList={artistsList}
+              selectedVibe={selectedVibe}
+              setSelectedVibe={setSelectedVibe}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              onResetFilters={handleResetFilters}
+              activeFilterCount={activeFilterCount}
+            />
+
+            {/* album count and live/local data source indicator */}
+            <div className="results-meta-row">
+              <span className="results-count">
+                <Disc3 style={{ width: '16px', height: '16px', color: 'var(--gold)' }} />
+                Showing <strong>{filteredAlbums.length}</strong> of {albums.length} Albums
               </span>
 
-              {activeFilterCount > 0 && (
-                <span className="vibe-tag">
-                  {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''} applied
+              <div className="results-badges">
+                <span className={`vibe-tag datasource-badge ${dataSource === 'supabase' ? 'datasource-badge--live' : ''}`}>
+                  <Database style={{ width: '12px', height: '12px', color: dataSource === 'supabase' ? '#4ade80' : 'var(--gold)' }} />
+                  {dataSource === 'supabase' ? 'Supabase DB Live' : 'Local Fallback'}
                 </span>
-              )}
+
+                {activeFilterCount > 0 && (
+                  <span className="vibe-tag">
+                    {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''} applied
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Album Grid */}
-          <AlbumGrid
-            albums={filteredAlbums}
-            onSelectAlbum={setSelectedAlbum}
-            onResetFilters={handleResetFilters}
-          />
 
-          {/* Community Recommendations */}
-          <Recommendations
-            recommendations={recommendations}
-            onOpenAddRec={() => {
-              setPrefilledAlbumForRec(null);
-              setIsAddRecOpen(true);
-            }}
-          />
+            {/* Album Grid */}
+            <AlbumGrid
+              albums={filteredAlbums}
+              onSelectAlbum={setSelectedAlbum}
+              onResetFilters={handleResetFilters}
+            />
+          </section>
+
+          {/* SECTION 3: Community Recommendations */}
+          <section id="recommendations-section" className="discography-section-block">
+            <div className="section-ribbon">
+              Community Recommendations
+            </div>
+
+            <Recommendations
+              recommendations={recommendations}
+              onOpenAddRec={() => {
+                setPrefilledAlbumForRec(null);
+                setIsAddRecOpen(true);
+              }}
+            />
+          </section>
 
         </main>
       </div>
+
+      {/* Audio Player Bar */}
+      {activeTrack && activeAudioAlbum && (
+        <AudioPlayerBar
+          currentTrack={activeTrack}
+          album={activeAudioAlbum}
+          isPlaying={isPlaying}
+          onTogglePlay={() => setIsPlaying(!isPlaying)}
+          onNextTrack={handleNextTrack}
+          onPrevTrack={handlePrevTrack}
+          onClose={() => {
+            setActiveTrack(null);
+            setActiveAudioAlbum(null);
+            setIsPlaying(false);
+          }}
+        />
+      )}
 
       {/* Modals */}
       <AlbumDetailModal
@@ -278,23 +330,6 @@ export default function App() {
         initialAlbum={prefilledAlbumForRec}
         onSubmitRecommendation={handleAddRecommendation}
       />
-
-      {/* Floating Audio Player Bar */}
-      <AudioPlayerBar
-        currentTrack={activeTrack}
-        album={activeAudioAlbum}
-        isPlaying={isPlaying}
-        onTogglePlay={() => setIsPlaying(!isPlaying)}
-        onNextTrack={handleNextTrack}
-        onPrevTrack={handlePrevTrack}
-        onClose={() => {
-          setActiveTrack(null);
-          setIsPlaying(false);
-        }}
-      />
-
-
-
     </div>
   );
 }

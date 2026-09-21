@@ -17,24 +17,21 @@ export default function FilterBar({
 }) {
   return (
     <div id="discography-section" className="glass filter-card">
-      
-      {/* Search, Artist, Sort & Reset Row */}
+
+      {/* top row: search, artist dropdown, sort, reset */}
       <div className="filter-grid">
-        
-        {/* Search with Search Icon */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <Search style={{ position: 'absolute', left: '14px', width: '16px', height: '16px', color: 'var(--muted)', pointerEvents: 'none' }} />
+
+        <div className="filter-search-wrap">
+          <Search className="filter-search-icon" />
           <input
             type="text"
             placeholder="Search album, artist, or song title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="inp-glass"
-            style={{ paddingLeft: '40px' }}
+            className="inp-glass filter-search-input"
           />
         </div>
 
-        {/* Artist Select */}
         <div>
           <select
             value={selectedArtist}
@@ -50,7 +47,6 @@ export default function FilterBar({
           </select>
         </div>
 
-        {/* Sort Select */}
         <div>
           <select
             value={sortBy}
@@ -64,14 +60,12 @@ export default function FilterBar({
           </select>
         </div>
 
-        {/* Reset Button */}
         <div>
           <button
             onClick={onResetFilters}
             disabled={activeFilterCount === 0}
             title="Reset Filters"
-            className="btn-line"
-            style={{ padding: '12px', width: '100%', justifyContent: 'center', opacity: activeFilterCount > 0 ? 1 : 0.4 }}
+            className="btn-line btn-line--reset"
           >
             <RotateCcw style={{ width: '14px', height: '14px' }} />
           </button>
@@ -79,9 +73,9 @@ export default function FilterBar({
 
       </div>
 
-      {/* Vibe Filter Pills Row */}
-      <div style={{ marginTop: '20px', paddingTop: '20px', borderTop: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-        <span style={{ fontSize: '.75rem', color: 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: '6px', marginRight: '6px', textTransform: 'uppercase', letterSpacing: '.08em', fontWeight: 600 }}>
+      {/* vibe genre filter pills */}
+      <div className="filter-vibe-row">
+        <span className="filter-vibe-label">
           <Sparkles style={{ width: '13px', height: '13px', color: 'var(--gold)' }} />
           VIBE FILTER:
         </span>

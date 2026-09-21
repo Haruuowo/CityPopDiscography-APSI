@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Music2, Disc } from 'lucide-react';
+import { Music2 } from 'lucide-react';
 import { getAuthenticCoverUrl } from '../utils/audioResolver';
 
 export default function AlbumCard({ album, onSelectAlbum }) {
@@ -13,46 +13,39 @@ export default function AlbumCard({ album, onSelectAlbum }) {
   return (
     <div onClick={() => onSelectAlbum(album)} className="album-card">
       <div>
-        {/* Artwork */}
+        {/* cover art with year+rating badge overlay */}
         <div className="album-media-box">
-          <img 
-            src={coverUrl} 
-            alt={album.title} 
-            onError={handleImageError} 
+          <img
+            src={coverUrl}
+            alt={album.title}
+            onError={handleImageError}
           />
-
-          {/* Year & Rating Badge */}
           <div className="badge-gold">
             ★ {album.year} · {album.rating}
           </div>
         </div>
 
-        {/* Card Info */}
+        {/* title, artist, genre tags */}
         <div className="album-card-body">
           <h3 className="album-title">{album.title}</h3>
           <p className="album-artist">
-            {album.artist} <span style={{ fontSize: '.75rem', color: 'var(--darker)' }}>({album.artistJp})</span>
+            {album.artist} <span className="card-artist-jp">({album.artistJp})</span>
           </p>
-
           <div>
             {album.genre.map((g) => (
-              <span key={g} className="vibe-tag">
-                {g}
-              </span>
+              <span key={g} className="vibe-tag">{g}</span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Footer */}
-      <div style={{ padding: '10px 16px', background: 'rgba(0,0,0,0.2)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '.75rem', fontFamily: 'JetBrains Mono, monospace', color: 'var(--muted)' }}>
-        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+      {/* card footer — track count and view prompt */}
+      <div className="card-footer">
+        <span className="card-footer-tracks">
           <Music2 style={{ width: '13px', height: '13px', color: 'var(--gold)' }} />
           {album.tracks.length} tracks
         </span>
-        <span style={{ color: 'var(--gold)', fontWeight: 600 }}>
-          View →
-        </span>
+        <span className="card-footer-view">View →</span>
       </div>
     </div>
   );

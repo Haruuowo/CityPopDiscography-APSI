@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Disc3, PlusCircle, Compass, Radio } from 'lucide-react';
+import { Disc3, PlusCircle } from 'lucide-react';
 
 const THEME_META = {
   dark: { icon: '●', label: 'Night mode' },
@@ -23,19 +23,29 @@ export default function Header({ totalAlbums, totalRecs, onOpenAddRec, theme, se
     return () => document.removeEventListener('click', onClick);
   }, []);
 
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <header>
       {/* Brand Logo */}
       <div className="logo cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
         <Disc3 style={{ width: '24px', height: '24px', color: 'var(--gold)' }} />
-        <span>CITY POP <span className="gold-accent">VAULT</span></span>
+        <span>CITY <span className="gold-accent">RECORDS</span></span>
       </div>
 
-      {/* Stats Counter & Theme Selector */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+      {/* Navigation Links matching layout */}
+      <nav className="header-nav">
+        <a href="#hero" onClick={(e) => { e.preventDefault(); scrollToSection('hero'); }}>HOME</a>
+        <a href="#discography-section" onClick={(e) => { e.preventDefault(); scrollToSection('discography-section'); }}>DISCOGRAPHY</a>
+        <a href="#recommendations-section" onClick={(e) => { e.preventDefault(); scrollToSection('recommendations-section'); }}>RECOMMENDATIONS</a>
+        <a href="#contact-section" onClick={(e) => { e.preventDefault(); scrollToSection('contact-section'); }}>CONTACT US</a>
+      </nav>
+
+      {/* Action Controls & Theme Selector */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         
-
-
         {/* Theme Dropdown Toggle */}
         <div className={`theme-dropdown ${dropdownOpen ? 'open' : ''}`} ref={dropdownRef}>
           <button
@@ -71,7 +81,7 @@ export default function Header({ totalAlbums, totalRecs, onOpenAddRec, theme, se
         {/* Recommend Button */}
         <button onClick={onOpenAddRec} className="btn-solid">
           <PlusCircle style={{ width: '14px', height: '14px' }} />
-          <span>Recommend</span>
+          <span>SIGN UP / RECOMMEND</span>
         </button>
 
       </div>
