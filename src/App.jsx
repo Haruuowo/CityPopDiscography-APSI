@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { CITY_POP_ALBUMS, INITIAL_RECOMMENDATIONS } from './data/citypopData';
-import { fetchAlbums, fetchRecommendations, postRecommendation } from './lib/supabaseClient';
+import { fetchAlbums, fetchRecommendations, postRecommendation, isSupabaseConfigured } from './lib/supabaseClient';
 import Header from './components/Header';
 import HeroBanner from './components/HeroBanner';
 import FilterBar from './components/FilterBar';
@@ -10,7 +10,7 @@ import AlbumDetailModal from './components/AlbumDetailModal';
 import Recommendations from './components/Recommendations';
 import AddRecModal from './components/AddRecModal';
 import AudioPlayerBar from './components/AudioPlayerBar';
-import { Disc3, Sparkles } from 'lucide-react';
+import { Disc3, Database, Sparkles } from 'lucide-react';
 import { getTrackAudioPreview } from './utils/audioResolver';
 
 export default function App() {
@@ -22,8 +22,9 @@ export default function App() {
     document.body.className = theme === 'dark' ? '' : `theme-${theme}`;
   }, [theme]);
 
-  // Albums state — loaded from local citypopData.js
+  // Albums state (dynamic from Supabase or fallback to citypopData.js)
   const [albums, setAlbums] = useState(CITY_POP_ALBUMS);
+  const [dataSource, setDataSource] = useState('local');
 
   // Audio player state
   const [activeTrack, setActiveTrack] = useState(null);
@@ -50,11 +51,12 @@ export default function App() {
     return INITIAL_RECOMMENDATIONS;
   });
 
-  // Load album + recommendation data on mount
+  // Load Supabase Data on mount
   useEffect(() => {
     async function loadData() {
       const albRes = await fetchAlbums();
       setAlbums(albRes.data);
+      setDataSource(albRes.source);
 
       const recRes = await fetchRecommendations();
       if (recRes.data && recRes.data.length > 0) {
@@ -244,7 +246,7 @@ export default function App() {
               activeFilterCount={activeFilterCount}
             />
 
-            {/* album count + active filter count */}
+            {/* album count and live/local data source indicator */}
             <div className="results-meta-row">
               <span className="results-count">
                 <Disc3 style={{ width: '16px', height: '16px', color: 'var(--gold)' }} />
@@ -252,6 +254,11 @@ export default function App() {
               </span>
 
               <div className="results-badges">
+                <span className={`vibe-tag datasource-badge ${dataSource === 'supabase' ? 'datasource-badge--live' : ''}`}>
+                  <Database style={{ width: '12px', height: '12px', color: dataSource === 'supabase' ? '#4ade80' : 'var(--gold)' }} />
+                  {dataSource === 'supabase' ? 'Supabase DB Live' : 'Local Fallback'}
+                </span>
+
                 {activeFilterCount > 0 && (
                   <span className="vibe-tag">
                     {activeFilterCount} filter{activeFilterCount > 1 ? 's' : ''} applied
