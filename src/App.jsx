@@ -48,7 +48,10 @@ export default function App() {
   const [recommendations, setRecommendations] = useState(() => {
     const saved = localStorage.getItem('citypop_recommendations');
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.filter(rec => !['yuki_nightdrive', 'cassette_dreamer', 'shibuya_scanner', 'MayonakaGroove', 'Kenji_80s', 'VinylCollector_JP', 'TokyoAfterDark', 'BoogieKing', 'NeonNights', 'MidnightPretender', 'ShinjukuCruiser', 'AorLover', 'HayashiFan', 'RetroFunk88', 'ShonanSurfer'].includes(rec.userName || rec.recommendedBy));
+      } catch (e) {}
     }
     return INITIAL_RECOMMENDATIONS;
   });
@@ -61,9 +64,7 @@ export default function App() {
       setDataSource(albRes.source);
 
       const recRes = await fetchRecommendations();
-      if (recRes.data && recRes.data.length > 0) {
-        setRecommendations(recRes.data);
-      }
+      setRecommendations(recRes.data || []);
     }
     loadData();
   }, []);

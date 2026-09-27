@@ -86,6 +86,13 @@ export async function fetchAlbums() {
   }
 }
 
+const SAMPLE_SEED_USERNAMES = [
+  'yuki_nightdrive', 'cassette_dreamer', 'shibuya_scanner', 'MayonakaGroove',
+  'Kenji_80s', 'VinylCollector_JP', 'TokyoAfterDark', 'BoogieKing',
+  'NeonNights', 'MidnightPretender', 'ShinjukuCruiser', 'AorLover', 'HayashiFan',
+  'RetroFunk88', 'ShonanSurfer'
+];
+
 /**
  * Fetch Community Recommendations with fallback
  */
@@ -104,7 +111,10 @@ export async function fetchRecommendations() {
       return { data: INITIAL_RECOMMENDATIONS, error, source: 'local' };
     }
 
-    const formattedRecs = data.map((rec) => ({
+    // Filter out old sample seed reviews so the community section starts clean
+    const realSubmissions = data.filter(rec => !SAMPLE_SEED_USERNAMES.includes(rec.user_name));
+
+    const formattedRecs = realSubmissions.map((rec) => ({
       id: rec.id,
       albumTitle: rec.album_title,
       artist: rec.artist,
@@ -149,5 +159,31 @@ export async function postRecommendation(newRec) {
   } catch (err) {
     console.error('❌ [Supabase] Failed to post recommendation:', err);
     return { data: null, error: err, source: 'error' };
+  }
+}
+
+/**
+ * Save newsletter subscriber to localStorage and Supabase
+ */
+export async function subscribeNewsletter(email) {
+  if (!email || !email.trim()) return;
+  const cleanEmail = email.trim();
+
+  // 1. Save to LocalStorage
+  try {
+    const existing = JSON.parse(localStorage.getItem('citypop_subscribers') || '[]');
+    if (!existing.includes(cleanEmail)) {
+      existing.push(cleanEmail);
+      localStorage.setItem('citypop_subscribers', JSON.stringify(existing));
+    }
+  } catch (e) {}
+
+  // 2. Save to Supabase if table exists
+  if (isSupabaseConfigured() && supabase) {
+    try {
+      await supabase.from('subscribers').insert([{ email: cleanEmail, subscribed_at: new Date().toISOString() }]);
+    } catch (err) {
+      // Ignore if table doesn't exist yet in Supabase
+    }
   }
 }

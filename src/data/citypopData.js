@@ -436,41 +436,7 @@ export const CITY_POP_ALBUMS = [
   }
 ];
 
-export const INITIAL_RECOMMENDATIONS = [
-  {
-    id: "rec-1",
-    albumTitle: "POCKET PARK",
-    artist: "Miki Matsubara",
-    year: 1980,
-    recommendedBy: "RetroFunk88",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-    comment: "An absolute late-night classic! 'Mayonaka no Door / Stay With Me' defined Tokyo nightlife and brassy city pop grooves.",
-    vibeTag: "Midnight Drive",
-    date: "2026-02-15"
-  },
-  {
-    id: "rec-2",
-    albumTitle: "MIGNONNE",
-    artist: "Taeko Ohnuki",
-    year: 1978,
-    recommendedBy: "TokyoNightDrive",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
-    comment: "Essential for late-night city walks & Tokyo highway driving. '4:00 A.M.' features incredible basslines and Ryuichi Sakamoto's arrangement.",
-    vibeTag: "Melancholic Sunset",
-    date: "2026-02-18"
-  },
-  {
-    id: "rec-3",
-    albumTitle: "TIMELY!!",
-    artist: "Anri",
-    year: 1983,
-    recommendedBy: "ShonanSurfer",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80",
-    comment: "Toshiki Kadomatsu's arrangement on 'Remember Summer Days' is absolute perfection. Non-stop high energy beach vibes.",
-    vibeTag: "Beach Sunset",
-    date: "2026-02-20"
-  }
-];
+export const INITIAL_RECOMMENDATIONS = [];
 
 export const ALL_VIBE_TAGS = [
   "All Vibes",

@@ -546,9 +546,14 @@ body.theme-sunset .contact-full-banner {
   border: 1px solid rgba(250, 204, 21, 0.4);
 }
 
+.contact-form-side {
+  display: flex;
+  flex-direction: column;
+}
+
 .contact-yellow-title {
   font-family: 'Syne', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #FACC15;
   letter-spacing: -.01em;
@@ -558,19 +563,19 @@ body.theme-sunset .contact-full-banner {
 
 .contact-white-subtext {
   font-family: 'DM Sans', sans-serif;
-  font-size: .92rem;
+  font-size: .95rem;
   font-weight: 600;
   color: #FFFFFF;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .contact-description-body {
   font-family: 'DM Sans', sans-serif;
-  font-size: .88rem;
-  line-height: 1.55;
+  font-size: .9rem;
+  line-height: 1.6;
   color: rgba(255, 255, 255, 0.85);
   max-width: 580px;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 body.theme-white .contact-description-body {
@@ -580,10 +585,10 @@ body.theme-white .contact-description-body {
 .contact-stacked-form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   width: 100%;
-  max-width: 480px;
-  margin-bottom: 20px;
+  max-width: 500px;
+  margin-bottom: 26px;
 }
 
 .contact-magenta-input {

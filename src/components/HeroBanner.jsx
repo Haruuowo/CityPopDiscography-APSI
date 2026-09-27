@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowDown, HelpCircle, CheckCircle2, Video, Edit3, Mail } from 'lucide-react';
+import { subscribeNewsletter } from '../lib/supabaseClient';
 
 // Helper to convert standard video links (YouTube, Vimeo, MP4) to playable embed URLs
 function formatVideoEmbedUrl(url) {
@@ -42,10 +43,11 @@ export default function HeroBanner({ onOpenAddRec, onOpenSuggestAlbum, initialVi
     document.getElementById('discography-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
     if (email.trim()) {
       setSubscribed(true);
+      await subscribeNewsletter(email);
       setTimeout(() => {
         setSubscribed(false);
         setEmail('');
@@ -99,55 +101,29 @@ export default function HeroBanner({ onOpenAddRec, onOpenSuggestAlbum, initialVi
         <div className="contact-banner-container">
           
           {/* Left Side: Video Player Frame */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
-            <div className="contact-featured-video-frame">
-              <span className="contact-video-overlay-badge">
-                <Video style={{ width: '11px', height: '11px', display: 'inline-block', marginRight: '4px' }} />
-                FEATURED CITYPOP VIDEO
-              </span>
+          <div className="contact-featured-video-frame">
+            <span className="contact-video-overlay-badge">
+              <Video style={{ width: '11px', height: '11px', display: 'inline-block', marginRight: '4px' }} />
+              FEATURED CITYPOP VIDEO
+            </span>
 
-              {isDirectVideo ? (
-                <video
-                  src={formattedEmbed}
-                  autoPlay
-                  muted
-                  loop
-                  controls
-                  playsInline
-                />
-              ) : (
-                <iframe
-                  src={formattedEmbed}
-                  title="Featured City Pop Video"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              )}
-            </div>
-
-            {/* Quick action to paste/change video link */}
-            <button
-              onClick={() => {
-                setTempUrl(videoUrlInput);
-                setShowVideoInputModal(true);
-              }}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--gold)',
-                fontSize: '0.72rem',
-                fontFamily: 'DM Sans, sans-serif',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                opacity: 0.85,
-                alignSelf: 'flex-start',
-                padding: '2px 0'
-              }}
-            >
-              <Edit3 size={12} /> Paste / Change Video Link
-            </button>
+            {isDirectVideo ? (
+              <video
+                src={formattedEmbed}
+                autoPlay
+                muted
+                loop
+                controls
+                playsInline
+              />
+            ) : (
+              <iframe
+                src={formattedEmbed}
+                title="Featured City Pop Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            )}
           </div>
 
           {/* Right Side: Description, Form & Aligned Action Buttons */}
@@ -217,51 +193,6 @@ export default function HeroBanner({ onOpenAddRec, onOpenSuggestAlbum, initialVi
         </div>
       </section>
 
-      {/* Video URL Input Modal */}
-      {showVideoInputModal && (
-        <div className="modal-overlay" onClick={() => setShowVideoInputModal(false)}>
-          <div
-            className="modal-content"
-            onClick={(e) => e.stopPropagation()}
-            style={{ maxWidth: '440px', padding: '24px' }}
-          >
-            <h3 style={{ color: 'var(--gold)', fontFamily: 'Syne, sans-serif', fontSize: '1.2rem', marginBottom: '8px' }}>
-              Set Featured Video Link
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.8)', marginBottom: '16px' }}>
-              Paste any YouTube URL (e.g. <code>https://youtube.com/watch?v=...</code>) or direct video URL to display in the header banner.
-            </p>
-            <form onSubmit={handleSaveVideoUrl}>
-              <input
-                type="url"
-                placeholder="https://www.youtube.com/watch?v=..."
-                value={tempUrl}
-                onChange={(e) => setTempUrl(e.target.value)}
-                required
-                className="contact-magenta-input"
-                style={{ marginBottom: '16px', background: '#fff', color: '#000' }}
-              />
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowVideoInputModal(false)}
-                  className="btn-line"
-                  style={{ padding: '6px 14px', fontSize: '0.8rem' }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn-solid"
-                  style={{ padding: '6px 14px', fontSize: '0.8rem' }}
-                >
-                  Save Video
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
 }
