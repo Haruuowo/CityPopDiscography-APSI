@@ -28,74 +28,22 @@ Our codebase achieves a **35% Self-Authored Code / 65% AI-Assisted Code** distri
 Below are the key technical components engineered manually, including exact file paths, function signatures, line numbers, and design rationale.
 
 ### A. Modular Design System & Theme Engine (`src/index.css`)
-* **File:** [`src/index.css`](file:///c:/Flutter%20act/citypop-discography/src/index.css) (Lines 1–120) & [`DOTON_DESIGN_SYSTEM.md`](file:///c:/Flutter%20act/citypop-discography/DOTON_DESIGN_SYSTEM.md)
+* **File:** [`src/index.css`](file:///c:/Flutter%20act/citypop-discography/src/index.css) & [`DOTON_DESIGN_SYSTEM.md`](file:///c:/Flutter%20act/citypop-discography/DOTON_DESIGN_SYSTEM.md)
 * **Description:** Designed and hand-coded the CSS custom property token system supporting three dynamic color themes (`dark`, `white`, `sunset`). Hand-calculated glassmorphic opacity levels, backdrop blur filters, and fluid layout breakpoints without relying on external utility frameworks like Tailwind.
-* **Key Code Snippet:**
-```css
-/* ---------- DARK TOKENS (default) ---------- */
-:root {
-  --bg-color: #0d0f14;
-  --panel-bg: rgba(22, 27, 38, 0.75);
-  --panel-border: rgba(255, 255, 255, 0.08);
-  --gold: #f59e0b;
-  --gold-glow: rgba(245, 158, 11, 0.35);
-  --text-main: #f8fafc;
-  --text-sub: #94a3b8;
-  --hero-img: url("./assets/background_images/backroundimage_night.png");
-}
-
-/* ---------- WHITE / DAY TOKENS ---------- */
-body.theme-white {
-  --bg-color: #f1f5f9;
-  --panel-bg: rgba(255, 255, 255, 0.85);
-  --panel-border: rgba(0, 0, 0, 0.08);
-  --gold: #d97706;
-  --text-main: #0f172a;
-  --text-sub: #475569;
-}
-```
 
 ### B. Supabase Cloud Sync & Local Fallback Resilience Layer (`src/lib/supabaseClient.js`)
-* **File:** [`src/lib/supabaseClient.js`](file:///c:/Flutter%20act/citypop-discography/src/lib/supabaseClient.js) (Lines 8–154)
-* **Function Signatures:** `isSupabaseConfigured()`, `fetchAlbums()`, `fetchRecommendations()`, `postRecommendation()`
+* **File:** [`src/lib/supabaseClient.js`](file:///c:/Flutter%20act/citypop-discography/src/lib/supabaseClient.js)
+* **Function Signatures:** `isSupabaseConfigured()`, `fetchAlbums()`, `fetchRecommendations()`, `postRecommendation()`, `subscribeNewsletter()`
 * **Description:** Engineered a hybrid data layer that checks if Supabase credentials exist and are non-placeholder. If Supabase is unreachable or unconfigured, the app gracefully falls back to local JSON data (`citypopData.js`) without throwing unhandled exceptions or crashing the client.
-* **Key Code Snippet:**
-```javascript
-export const isSupabaseConfigured = () => {
-  return (
-    !!supabaseUrl &&
-    !!supabaseAnonKey &&
-    supabaseUrl !== 'https://your-project-ref.supabase.co' &&
-    supabaseAnonKey !== 'your-anon-key-here'
-  );
-};
-
-export async function fetchAlbums() {
-  if (!isSupabaseConfigured() || !supabase) {
-    console.log('⚡ [Supabase] Using local fallback albums data');
-    return { data: CITY_POP_ALBUMS, error: null, source: 'local' };
-  }
-  try {
-    const { data: albumsData, error: albumsErr } = await supabase
-      .from('albums')
-      .select('*')
-      .order('rating', { ascending: false });
-    // ... data mapping & authentic cover resolution
-    return { data: formattedAlbums, error: null, source: 'supabase' };
-  } catch (err) {
-    return { data: CITY_POP_ALBUMS, error: err, source: 'local' };
-  }
-}
-```
 
 ### C. Automatic iTunes & Spotify Preview Resolver (`src/utils/audioResolver.js`)
-* **File:** [`src/utils/audioResolver.js`](file:///c:/Flutter%20act/citypop-discography/src/utils/audioResolver.js) (Lines 1–145)
+* **File:** [`src/utils/audioResolver.js`](file:///c:/Flutter%20act/citypop-discography/src/utils/audioResolver.js)
 * **Function Signature:** `getTrackAudioPreview(trackTitle, artistName, albumTitle, trackNumber)`
 * **Description:** Hand-coded lookup tables and async search logic that queries Apple Music / iTunes Search APIs dynamically to fetch authentic 30-second audio preview URLs (`.m4a`), providing audio playback for Japanese City Pop tracks even when Spotify preview URLs are restricted.
 
 ### D. PostgreSQL Relational Schema & Row Level Security (`supabase/schema.sql`)
 * **File:** `supabase/schema.sql`
-* **Description:** Hand-authored SQL schema establishing primary and foreign key constraints between `albums`, `tracks`, and `recommendations` tables. Enabled Row Level Security (RLS) and defined explicit insert policies (`CREATE POLICY "Allow public insert" ON public.recommendations FOR INSERT WITH CHECK (true);`) to restrict write permissions while allowing public read access.
+* **Description:** Hand-authored SQL schema establishing primary and foreign key constraints between `albums`, `tracks`, `recommendations`, and `subscribers` tables. Enabled Row Level Security (RLS) and defined explicit insert policies (`CREATE POLICY "Allow public insert" ON public.recommendations FOR INSERT WITH CHECK (true);`) to restrict write permissions while allowing public read access.
 
 ---
 
@@ -104,7 +52,7 @@ export async function fetchAlbums() {
 AI was used as an interactive pair-programming partner to speed up routine setup and repetitive tasks:
 
 1. **Seed Dataset Formatting (`src/data/citypopData.js`):** Used AI to transform raw album metadata (Mariya Takeuchi, Tatsuro Yamashita, Anri, Miki Matsubara) into structured JavaScript array objects with track lists.
-2. **React Component Skeleton Drafting:** Used AI to generate preliminary JSX boilerplate for modal dialogs ([`src/components/AddRecModal.jsx`](file:///c:/Flutter%20act/citypop-discography/src/components/AddRecModal.jsx) and [`src/components/AlbumDetailModal.jsx`](file:///c:/Flutter%20act/citypop-discography/src/components/AlbumDetailModal.jsx)).
+2. **React Component Skeleton Drafting:** Used AI to generate preliminary JSX boilerplate for modal dialogs ([`src/components/SuggestAlbumModal.jsx`](file:///c:/Flutter%20act/citypop-discography/src/components/SuggestAlbumModal.jsx) and [`src/components/AlbumDetailModal.jsx`](file:///c:/Flutter%20act/citypop-discography/src/components/AlbumDetailModal.jsx)).
 3. **Error Log Parsing:** Used AI to analyze asynchronous `useEffect` re-rendering trace errors and CORS preflight header mismatches during early development.
 
 ---
