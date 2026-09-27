@@ -41,7 +41,10 @@ export const AUTHENTIC_ALBUM_COVERS = {
   'fuyū-kūkan': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/cd/4e/ea/cd4eeac8-b592-e933-6b6b-f928afab15ae/mzi.rjmkypgd.jpg/600x600bb.jpg',
   '3': 'https://is1-ssl.mzstatic.com/image/thumb/Music118/v4/81/0e/79/810e795a-c228-1e5d-4122-a4a4b2bbd3a8/190295494711.jpg/600x600bb.jpg',
   'tokyo sniper': 'https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/a4/d3/b6/a4d3b632-1de0-1d3f-5721-d50eeb58e743/mzi.tndehlcj.jpg/600x600bb.jpg',
-  'ocean side': 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/34/60/5b/34605b06-7915-b2e2-61f2-355a263414bc/HIEN-05051_990000.jpg/600x600bb.jpg'
+  'ocean side': 'https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/34/60/5b/34605b06-7915-b2e2-61f2-355a263414bc/HIEN-05051_990000.jpg/600x600bb.jpg',
+  'variety': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/31/ba/8a/31ba8a52-2706-f55e-b2de-5958817d1fec/dj.rkpkcmzk.jpg/600x600bb.jpg',
+  'ride on time': 'https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4a/09/74/4a09747b-40e2-af36-88e8-e7a0c82a9752/196006205003.jpg/600x600bb.jpg',
+  'sea breeze': 'https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/bf/f4/fb/bff4fb55-b40b-71db-eb4f-9e7f62024e16/4547366621259.jpg/600x600bb.jpg'
 };
 
 /**
@@ -64,27 +67,28 @@ export async function fetchAlbumCoverFromiTunes(artist, title) {
 export function getAuthenticCoverUrl(album) {
   if (!album) return AUTHENTIC_ALBUM_COVERS['bread-butter-late-late-summer'];
 
-  // 1. Exact match by album ID in our authentic iTunes covers map
+  // 1. If album object already has a valid cover URL (from Supabase or local data), use it directly
+  const rawCover = album.cover || album.cover_url || album.coverUrl;
+  if (rawCover && typeof rawCover === 'string' && rawCover.trim().startsWith('http')) {
+    return rawCover.trim();
+  }
+
+  // 2. Exact match by album ID in our authentic iTunes covers map
   if (album.id && AUTHENTIC_ALBUM_COVERS[album.id]) {
     return AUTHENTIC_ALBUM_COVERS[album.id];
   }
 
-  // 2. Match by title key in our authentic iTunes covers map
+  // 3. Match by title key in our authentic iTunes covers map
   const titleKey = (album.title || '').toLowerCase().trim();
   if (AUTHENTIC_ALBUM_COVERS[titleKey]) {
     return AUTHENTIC_ALBUM_COVERS[titleKey];
   }
 
-  // 3. Fuzzy match title key against map
+  // 4. Safe fuzzy match (require key length >= 4 to avoid short key mismatches like '3')
   for (const [key, url] of Object.entries(AUTHENTIC_ALBUM_COVERS)) {
-    if (titleKey && (titleKey.includes(key) || key.includes(titleKey))) {
+    if (key.length >= 4 && titleKey && (titleKey.includes(key) || (titleKey.length >= 4 && key.includes(titleKey)))) {
       return url;
     }
-  }
-
-  // 4. Use album.cover if it's a valid mzstatic URL
-  if (album.cover && album.cover.includes('mzstatic.com')) {
-    return album.cover;
   }
 
   return AUTHENTIC_ALBUM_COVERS['bread-butter-late-late-summer'];

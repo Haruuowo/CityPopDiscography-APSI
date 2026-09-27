@@ -9,6 +9,7 @@ import AlbumCard from './components/AlbumCard';
 import AlbumDetailModal from './components/AlbumDetailModal';
 import Recommendations from './components/Recommendations';
 import AddRecModal from './components/AddRecModal';
+import SuggestAlbumModal from './components/SuggestAlbumModal';
 import AudioPlayerBar from './components/AudioPlayerBar';
 import { Disc3, Database, Sparkles } from 'lucide-react';
 import { getTrackAudioPreview } from './utils/audioResolver';
@@ -41,6 +42,7 @@ export default function App() {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [isAddRecOpen, setIsAddRecOpen] = useState(false);
   const [prefilledAlbumForRec, setPrefilledAlbumForRec] = useState(null);
+  const [isSuggestAlbumOpen, setIsSuggestAlbumOpen] = useState(false);
 
   // Recommendations state
   const [recommendations, setRecommendations] = useState(() => {
@@ -203,6 +205,7 @@ export default function App() {
             setPrefilledAlbumForRec(null);
             setIsAddRecOpen(true);
           }}
+          onOpenSuggestAlbum={() => setIsSuggestAlbumOpen(true)}
         />
 
         {/* Main Page Container */}
@@ -329,6 +332,11 @@ export default function App() {
         }}
         initialAlbum={prefilledAlbumForRec}
         onSubmitRecommendation={handleAddRecommendation}
+      />
+
+      <SuggestAlbumModal
+        isOpen={isSuggestAlbumOpen}
+        onClose={() => setIsSuggestAlbumOpen(false)}
       />
     </div>
   );
