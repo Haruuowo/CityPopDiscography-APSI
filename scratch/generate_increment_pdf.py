@@ -238,10 +238,12 @@ def build_pdf(filename):
     story.append(Paragraph("• <b>Community Recommendations Pipeline:</b> Implemented reactive submission modal sending new recommendations directly to the Supabase database with optimistic UI updates.", bullet_style))
 
     # Milestone 3
-    story.append(Paragraph("Increment 3: Pre-Public Security Lockdown & Verification (Completed Ahead of Schedule)", h2_style))
-    story.append(Paragraph("• <b>Git History & Environment Isolation:</b> Listed <code>.env</code> in <code>.gitignore</code>, shipped clean <code>.env.example</code>, and verified zero secrets in commit logs.", bullet_style))
-    story.append(Paragraph("• <b>Database Access Control:</b> Enforced Row Level Security (RLS) policies across Supabase tables to safeguard public anon key usage.", bullet_style))
-    story.append(Paragraph("• <b>Security Compliance Verification:</b> Executed thorough audit and authored <code>SECURITY-CHECKLIST.md</code> in the project directory.", bullet_style))
+    story.append(Paragraph("Increment 3: Features & Pre-Public Security Lockdown (Completed Ahead of Schedule)", h2_style))
+    story.append(Paragraph("• <b>Featured YouTube Video Header Banner:</b> Replaced static image placeholder in <code>HeroBanner.jsx</code> with a 500px responsive 16:9 video frame embedding official City Pop video streams (<code>https://youtu.be/VtRIRJ0tBRc</code>).", bullet_style))
+    story.append(Paragraph("• <b>Newsletter Subscription Engine:</b> Built an intuitive newsletter subscription form with real-time email validation, local state persistence, and automatic Supabase PostgreSQL synchronization.", bullet_style))
+    story.append(Paragraph("• <b>Dedicated Album Curation Request Modal:</b> Developed <code>SuggestAlbumModal.jsx</code> separating the <i>'Ask What Album To Add Next'</i> flow from community recommendations with automated <code>mailto:</code> dispatch.", bullet_style))
+    story.append(Paragraph("• <b>Authentic Vinyl Cover Resolver & Bug Fixes:</b> Fixed fuzzy title matching in <code>audioResolver.js</code> and added high-res 600x600 vinyl artwork mappings for <i>Variety</i>, <i>Ride on Time</i>, <i>Sea Breeze</i>, <i>Timely!!</i>, and <i>Pocket Park</i>.", bullet_style))
+    story.append(Paragraph("• <b>Pre-Public Security Lockdown:</b> Listed <code>.env</code> in <code>.gitignore</code>, shipped clean <code>.env.example</code>, enforced Row Level Security (RLS) policies on Supabase tables, and completed <code>SECURITY-CHECKLIST.md</code>.", bullet_style))
 
     story.append(Spacer(1, 10))
 
