@@ -1,16 +1,16 @@
 # Final Project Presentation Slides (`SLIDES.md`)
 
-**Project Name:** Doton City Pop Discography & Community Vault  
+**Project Name:** City Pop Discography & Community Vault  
 **Course Code:** 6APSI — Final Project Presentation (100 Points)  
 **Public Repository:** [Haruuowo/CityPopDiscography-APSI](https://github.com/Haruuowo/CityPopDiscography-APSI)  
 
 ---
 
 ## Slide 1: Title & Introduction
-* **Header:** Doton City Pop Vault — 🏙️ Japanese Vinyl Discography & Community Recommendations
+* **Header:** City Pop Vault — 🏙️ Japanese Vinyl Discography & Community Recommendations
 * **Subtitle:** Full-Stack JavaScript (React, Vite, Node/Express, Supabase PostgreSQL)
 * **Presenter:** Student Final Presentation (Course 6APSI)
-* **Visual:** High-resolution screenshot of Doton City Pop Vault dark mode hero banner with Mariya Takeuchi vinyl cover frame.
+* **Visual:** High-resolution screenshot of City Pop Vault dark mode hero banner with Mariya Takeuchi vinyl cover frame.
 
 ---
 
@@ -26,7 +26,7 @@
 ---
 
 ## Slide 3: Technical Stack & System Architecture
-* **Frontend:** React 18, Vite, Lucide Icons, Custom CSS Custom Properties Design System (`DOTON_DESIGN_SYSTEM.md`) supporting 3 color themes (`dark`, `white`, `sunset`).
+* **Frontend:** React 18, Vite, Lucide Icons, Custom CSS Custom Properties Design System (`DESIGN_SYSTEM.md`) supporting 3 color themes (`dark`, `white`, `sunset`).
 * **Backend & Database:** Supabase (Cloud PostgreSQL) with `albums`, `tracks`, and `recommendations` relational schemas.
 * **Resilience Layer:** `supabaseClient.js` hybrid query wrapper with automated fallback to `citypopData.js` during network offline states.
 * **Audio Resolver:** Dynamic iTunes Search API lookup matching track titles to authentic `.m4a` 30-second clips.
@@ -35,7 +35,7 @@
 
 ## Slide 4: Security Lockdown & Pre-Public Compliance
 * **Credential Isolation:** `.env` listed in `.gitignore` (un-tracked); `.env.example` shipped with non-sensitive template placeholders.
-* **Git History Cleanse:** Verified zero secrets or database strings in git commit history (`git log -p`).
+* **Git History Cleanse:** Verified zero secrets or database strings in git history (`git log -p`).
 * **Database Row Level Security (RLS):** Policies enforced on all Supabase tables (`CREATE POLICY "Allow public insert"`).
 * **Completed Checklist:** Completed [`SECURITY-CHECKLIST.md`](file:///c:/Flutter%20act/citypop-discography/SECURITY-CHECKLIST.md) verifying 100% security readiness.
 

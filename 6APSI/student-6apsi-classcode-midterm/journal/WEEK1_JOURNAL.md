@@ -1,16 +1,16 @@
 # Reflection Journal — Week 1 (`journal/WEEK1_JOURNAL.md`)
 
 **Course Code:** 6APSI — Final Project Submission  
-**Project:** Doton City Pop Discography & Community Vault  
+**Project:** City Pop Discography & Community Vault  
 **Phase:** Week 1 Progress Submission (15 Points)  
 **Date:** September 16, 2026  
 
 ---
 
 ### 1. Goal for the Week
-My goal for Week 1 was to establish the foundation of the **Doton City Pop Vault** platform. Specifically:
+My goal for Week 1 was to establish the foundation of the **City Pop Vault** platform. Specifically:
 * Design a modular React single-page application structure.
-* Architect a hand-crafted CSS design system (`DOTON_DESIGN_SYSTEM.md`) supporting glassmorphism aesthetics and multi-theme switching (`dark`, `white`, `sunset`).
+* Architect a hand-crafted CSS design system (`DESIGN_SYSTEM.md`) supporting glassmorphism aesthetics and multi-theme switching (`dark`, `white`, `sunset`).
 * Implement an HTML5 audio player context supporting persistent, uninterrupted playback across modal dialogs and filter operations.
 
 ---
@@ -23,7 +23,7 @@ This early head-start ensured that core frontend state management (like multi-cr
 ---
 
 ### 3. What I Did This Week
-1. **Design System & Styling:** Authored `DOTON_DESIGN_SYSTEM.md` using plain Vanilla CSS variables for custom color tokens, glassmorphic panel blurs, gold accents, and fluid grid layouts.
+1. **Design System & Styling:** Authored `DESIGN_SYSTEM.md` using plain Vanilla CSS variables for custom color tokens, glassmorphic panel blurs, gold accents, and fluid grid layouts.
 2. **React Component Breakdown:** Built modular components (`Header`, `HeroBanner`, `FilterBar`, `AlbumGrid`, `AlbumCard`, `AlbumDetailModal`, `AudioPlayerBar`, `AddRecModal`).
 3. **Audio Resolver Engine:** Created `src/utils/audioResolver.js` to dynamically fetch authentic 30-second audio preview URLs from iTunes/Apple Music APIs.
 4. **State Management:** Lifted active track and playing states to `App.jsx` to prevent audio playback from resetting during state re-renders.

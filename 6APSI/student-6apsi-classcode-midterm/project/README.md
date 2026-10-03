@@ -1,4 +1,4 @@
-# Doton City Pop Discography & Community Vault 🏙️🎵
+# City Pop Discography & Community Vault 🏙️🎵
 
 [![Full-Stack JavaScript & AI Badge](https://img.shields.io/badge/Badge-Full--Stack%20JS%20%26%20AI-blueviolet)](file:///c:/Flutter%20act/citypop-discography/AI-USAGE.md)
 [![Security Audit](https://img.shields.io/badge/Security-Lockdown%20100%25-success)](file:///c:/Flutter%20act/citypop-discography/SECURITY-CHECKLIST.md)
@@ -12,7 +12,7 @@
 
 ## 1. Overview
 
-**Doton City Pop Vault** is an interactive full-stack web application created to preserve, showcase, and celebrate 1970s and 1980s Japanese City Pop, Funk, AOR, and Boogie vinyl albums. 
+**City Pop Vault** is an interactive full-stack web application created to preserve, showcase, and celebrate 1970s and 1980s Japanese City Pop, Funk, AOR, and Boogie vinyl albums. 
 
 The application solves the problem of discovering rare Japanese vinyl music by offering a centralized, curated digital sanctuary where music enthusiasts can filter records by mood or vibe, play continuous 30-second audio previews across viewports, explore authentic high-res album covers, and request new album additions. It is built for retro music lovers, vinyl collectors, and fans of late-night Tokyo aesthetic culture.
 
@@ -138,7 +138,7 @@ citypop-discography/
 ├── .gitignore                 # Excludes .env, node_modules, dist
 ├── AI-USAGE.md                # Full-Stack JS & AI Badge disclosure (35% manual code)
 ├── SECURITY-CHECKLIST.md     # Pre-public security audit checklist (100% completed)
-├── DOTON_DESIGN_SYSTEM.md     # Custom Vanilla CSS design system property tokens
+├── DESIGN_SYSTEM.md           # Custom Vanilla CSS design system property tokens
 ├── README.md                  # Root documentation guide
 ├── REPORT.md                  # Project Increment Report
 ├── Project_Increment_Report.pdf # Formatted PDF increment report artifact
@@ -169,7 +169,7 @@ citypop-discography/
 ## 6. Screenshots
 
 ### Main Application Dashboard & Video Hero Banner
-![Doton City Pop Vault Main Interface](file:///c:/Flutter%20act/citypop-discography/presentation/assets/hero_banner_preview.png)
+![City Pop Vault Main Interface](file:///c:/Flutter%20act/citypop-discography/presentation/assets/hero_banner_preview.png)
 
 ### Album Grid & Filtering Interface
 ![Album Grid & Filter Controls](file:///c:/Flutter%20act/citypop-discography/presentation/assets/album_grid_preview.png)

@@ -1,6 +1,6 @@
-# Doton Design System
+# City Pop Design System
 
-A short, fixed set of decisions — **tokens** (colour, type, spacing), and the **reusable components** that use them — tailored for the **Doton City Pop Vault** platform. Every screen in the application adheres strictly to these design system guidelines.
+A short, fixed set of decisions — **tokens** (colour, type, spacing), and the **reusable components** that use them — tailored for the **City Pop Vault** platform. Every screen in the application adheres strictly to these design system guidelines.
 
 ---
 

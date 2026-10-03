@@ -9,9 +9,9 @@
 ## 🕒 Video Walkthrough Timeline & Script Outline
 
 ### 0:00 – 0:45 | Introduction & Problem Statement
-* **Visual:** On-camera greeting (Presenter face visible in camera inset / main window), switching to screen share of Doton City Pop Vault web app.
+* **Visual:** On-camera greeting (Presenter face visible in camera inset / main window), switching to screen share of City Pop Vault web app.
 * **Script:**  
-  *"Hello! Welcome to the final project presentation for Doton City Pop Vault, developed for course 6APSI. Japanese 1970s and 80s City Pop has seen a massive global resurgence, but finding structured album discographies with working audio previews and community recommendations is difficult. I built Doton City Pop Vault as a full-stack React and PostgreSQL platform to solve this problem."*
+  *"Hello! Welcome to the final project presentation for City Pop Vault, developed for course 6APSI. Japanese 1970s and 80s City Pop has seen a massive global resurgence, but finding structured album discographies with working audio previews and community recommendations is difficult. I built City Pop Vault as a full-stack React and PostgreSQL platform to solve this problem."*
 
 ---
 

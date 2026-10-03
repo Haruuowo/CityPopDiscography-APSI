@@ -2,7 +2,7 @@
 
 **Document:** 4 of 4 (Midterm Retrospective)  
 **Course Code:** 6APSI  
-**Project:** Doton City Pop Discography & Community Vault  
+**Project:** City Pop Discography & Community Vault  
 **Date:** September 20, 2026  
 
 ---
@@ -10,7 +10,7 @@
 ### 1. Frontend Architecture & Prelim Continuity
 > **Note:** As I previously submitted a Prelim Reflection Journal covering early JavaScript and React UI foundations, this journal focuses predominantly on backend architecture, Node/Express REST APIs, and PostgreSQL/Supabase integration.
 
-Building the **Doton City Pop Vault** platform required translating core JavaScript concepts and React component architecture into a production-grade full-stack web application. Establishing a modular design system (`DOTON_DESIGN_SYSTEM.md`) using plain CSS custom properties enabled seamless visual consistency and multi-theme switching (`dark`, `white`, `sunset`) across all viewports. The primary frontend challenge involved managing synchronized state across multi-criteria filter bars while maintaining persistent HTML5 audio preview playback across modal dialogs without triggering unwanted component re-renders.
+Building the **City Pop Vault** platform required translating core JavaScript concepts and React component architecture into a production-grade full-stack web application. Establishing a modular design system (`DESIGN_SYSTEM.md`) using plain CSS custom properties enabled seamless visual consistency and multi-theme switching (`dark`, `white`, `sunset`) across all viewports. The primary frontend challenge involved managing synchronized state across multi-criteria filter bars while maintaining persistent HTML5 audio preview playback across modal dialogs without triggering unwanted component re-renders.
 
 ---
 
@@ -42,7 +42,7 @@ Additionally, handling PostgreSQL data types revealed key constraints: inserting
 ### 4. Honest AI Utilization & Code Craftsmanship Breakdown
 Rather than relying on unguided "vibe coding" where AI generates unchecked output, I used AI strictly as a pair-programming multiplier. My codebase reflects a **70% Manual Craftsmanship / 30% AI Assistance** distribution:
 
-* **Manual Engineering (70%):** Hand-crafted the modular CSS design system (`DOTON_DESIGN_SYSTEM.md`), React audio player context & state lifting, multi-criteria filter algorithms, manual Supabase SQL schema migrations, RLS security rules, Express middleware stack, and cross-origin fetch headers.
+* **Manual Engineering (70%):** Hand-crafted the modular CSS design system (`DESIGN_SYSTEM.md`), React audio player context & state lifting, multi-criteria filter algorithms, manual Supabase SQL schema migrations, RLS security rules, Express middleware stack, and cross-origin fetch headers.
 * **AI Pair-Programming (30%):** Accelerated generation of repetitive CSS glassmorphism custom property templates, drafted raw SQL seed scripts for 15+ classic City Pop albums with authentic iTunes audio preview links, and parsed complex async `useEffect` stack traces.
 
 AI assistance had clear pitfalls that required manual intervention. AI initially recommended an overly complex Redux state tree for managing floating audio playback, which introduced redundant boilerplate; refactoring to a lightweight React Context provider proved far more maintainable. AI also suggested raw SQL query strings that bypassed Supabase's JS method chaining (`.from('albums').select('*, tracks(*)')`). While AI accelerated routine syntax generation, resolving CORS preflight errors, PostgreSQL array constraints, and manual Supabase data workflows required hands-on, methodical debugging.

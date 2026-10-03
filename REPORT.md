@@ -1,7 +1,7 @@
 # Project Increment Report (`REPORT.md`)
 
 **Course Code:** 6APSI — Final Project Submission  
-**Project Title:** Doton City Pop Discography & Community Vault  
+**Project Title:** City Pop Discography & Community Vault  
 **Document Location:** `project/REPORT.md`  
 **Repository:** [CityPopDiscography-APSI (GitHub)](https://github.com/Haruuowo/CityPopDiscography-APSI)  
 
@@ -9,8 +9,8 @@
 
 ## 1. Executive Summary & Strategic Early Initiation
 
-Development on the **Doton City Pop Vault** was **started early in the preliminary cycle**, well ahead of standard course deadlines. Initiating early provided significant strategic technical advantages:
-1. **Architectural Depth:** Enabled authoring a hand-crafted CSS design system (`DOTON_DESIGN_SYSTEM.md`) with glassmorphism tokens and multi-theme switching without external UI frame bloat.
+Development on the **City Pop Vault** was **started early in the preliminary cycle**, well ahead of standard course deadlines. Initiating early provided significant strategic technical advantages:
+1. **Architectural Depth:** Enabled authoring a hand-crafted CSS design system (`DESIGN_SYSTEM.md`) with glassmorphism tokens and multi-theme switching without external UI frame bloat.
 2. **Data Resilience:** Allowed building a dynamic Supabase cloud database layer paired with automatic local mock fallbacks (`citypopData.js`), guaranteeing 100% app uptime even during network disruptions.
 3. **Pre-Public Security Lockdown:** Provided ample buffer to execute thorough git history cleansing, environment variable isolation, Row Level Security (RLS) enforcement, and completion of `SECURITY-CHECKLIST.md` prior to repository release.
 

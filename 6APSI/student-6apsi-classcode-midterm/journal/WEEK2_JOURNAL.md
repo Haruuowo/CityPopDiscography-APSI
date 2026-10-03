@@ -1,7 +1,7 @@
 # Reflection Journal — Week 2 (`journal/WEEK2_JOURNAL.md`)
 
 **Course Code:** 6APSI — Final Project Submission  
-**Project:** Doton City Pop Discography & Community Vault  
+**Project:** City Pop Discography & Community Vault  
 **Phase:** Week 2 Progress Submission (15 Points)  
 **Date:** September 23, 2026  
 

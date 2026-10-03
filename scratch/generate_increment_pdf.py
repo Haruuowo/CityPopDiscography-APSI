@@ -32,7 +32,7 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages 2+)
         if self._pageNumber > 1:
-            self.drawString(54, 750, "DOTON CITY POP VAULT — PROJECT INCREMENT REPORT")
+            self.drawString(54, 750, "CITY POP VAULT — PROJECT INCREMENT REPORT")
             self.drawRightString(612 - 54, 750, "COURSE CODE: 6APSI")
             self.setStrokeColor(colors.HexColor("#CBD5E1"))
             self.setLineWidth(0.5)
@@ -164,7 +164,7 @@ def build_pdf(filename):
 
     # Title Banner Block
     story.append(Paragraph("PROJECT INCREMENT & PROGRESS REPORT", title_style))
-    story.append(Paragraph("Doton City Pop Discography & Community Vault · Course Code: 6APSI", subtitle_style))
+    story.append(Paragraph("City Pop Discography & Community Vault · Course Code: 6APSI", subtitle_style))
     story.append(HRFlowable(width="100%", thickness=1.5, color=ACCENT, spaceBefore=0, spaceAfter=12))
 
     # Meta Table (Date, Author, Status, Project Phase)
@@ -195,7 +195,7 @@ def build_pdf(filename):
     early_box_content = [
         [Paragraph("<b>★ EARLY INITIATION ADVANTAGE & STRATEGIC HIGHLIGHT</b>", ParagraphStyle('BoxH', parent=highlight_box_style, fontName='Helvetica-Bold', fontSize=10, textColor=colors.HexColor("#92400E")))],
         [Paragraph(
-            "<b>Proactive Timeline:</b> Work on this project was <b>started early in the preliminary cycle</b>, well ahead of standard submission schedules. Initiating early provided significant strategic technical advantages: it allowed ample time for thorough architectural planning, hand-crafting a modular design system (<code>DOTON_DESIGN_SYSTEM.md</code>), integrating a dual dynamic/fallback Supabase data layer, and completing all pre-public security lockdown requirements (<code>SECURITY-CHECKLIST.md</code>) before public repository release.",
+            "<b>Proactive Timeline:</b> Work on this project was <b>started early in the preliminary cycle</b>, well ahead of standard submission schedules. Initiating early provided significant strategic technical advantages: it allowed ample time for thorough architectural planning, hand-crafting a modular design system (<code>DESIGN_SYSTEM.md</code>), integrating a dual dynamic/fallback Supabase data layer, and completing all pre-public security lockdown requirements (<code>SECURITY-CHECKLIST.md</code>) before public repository release.",
             highlight_box_style
         )]
     ]
@@ -214,7 +214,7 @@ def build_pdf(filename):
     # Section 1: Executive Summary
     story.append(Paragraph("1. Executive Summary", h1_style))
     story.append(Paragraph(
-        "The <b>Doton City Pop Vault</b> platform is a full-stack web application designed to preserve, showcase, and recommend Japanese 1970s and 1980s City Pop vinyl albums. By combining a modern React frontend with a PostgreSQL/Supabase cloud database, the application enables users to filter albums by mood/vibe, play 30-second audio previews continuously across viewports, and submit new community album recommendations in real time.",
+        "The <b>City Pop Vault</b> platform is a full-stack web application designed to preserve, showcase, and recommend Japanese 1970s and 1980s City Pop vinyl albums. By combining a modern React frontend with a PostgreSQL/Supabase cloud database, the application enables users to filter albums by mood/vibe, play 30-second audio previews continuously across viewports, and submit new community album recommendations in real time.",
         body_style
     ))
     story.append(Paragraph(
@@ -227,7 +227,7 @@ def build_pdf(filename):
     
     # Milestone 1
     story.append(Paragraph("Increment 1: Core Frontend & UI Design System (Completed Early)", h2_style))
-    story.append(Paragraph("• <b>Modular Design System:</b> Hand-crafted <code>DOTON_DESIGN_SYSTEM.md</code> using Vanilla CSS variables for high-fidelity dark glassmorphism, gold accents, and multi-theme switching (Night, Day, Sunset).", bullet_style))
+    story.append(Paragraph("• <b>Modular Design System:</b> Hand-crafted <code>DESIGN_SYSTEM.md</code> using Vanilla CSS variables for high-fidelity dark glassmorphism, gold accents, and multi-theme switching (Night, Day, Sunset).", bullet_style))
     story.append(Paragraph("• <b>React Component Architecture:</b> Developed modular components including <code>Header</code>, <code>HeroBanner</code>, <code>FilterBar</code>, <code>AlbumGrid</code>, <code>AlbumDetailModal</code>, and <code>AudioPlayerBar</code>.", bullet_style))
     story.append(Paragraph("• <b>Persistent Audio Context:</b> Integrated HTML5 audio player supporting uninterrupted playback while navigating filters and opening detail dialogs, with fallback iTunes preview URL resolution.", bullet_style))
 

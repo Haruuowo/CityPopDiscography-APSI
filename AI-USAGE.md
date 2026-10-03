@@ -1,6 +1,6 @@
 # AI Usage & Code Craftsmanship Disclosure (`AI-USAGE.md`)
 
-**Project:** Doton City Pop Discography & Community Vault  
+**Project:** City Pop Discography & Community Vault  
 **Course:** 6APSI — Final Project Submission  
 **Repository:** [CityPopDiscography-APSI (GitHub)](https://github.com/Haruuowo/CityPopDiscography-APSI)  
 **Target Badge:** Full-Stack JavaScript and AI Badge  
@@ -28,7 +28,7 @@ Under the course rubric, projects cannot be more than 80% vibe coded (at least 2
 Here are the specific subsystems and files where I took the wheel and wrote the logic manually:
 
 ### A. Custom CSS Design System & Theme Engine
-* **Files:** [`src/index.css`](file:///c:/Flutter%20act/citypop-discography/src/index.css) & [`DOTON_DESIGN_SYSTEM.md`](file:///c:/Flutter%20act/citypop-discography/DOTON_DESIGN_SYSTEM.md)
+* **Files:** [`src/index.css`](file:///c:/Flutter%20act/citypop-discography/src/index.css) & [`DESIGN_SYSTEM.md`](file:///c:/Flutter%20act/citypop-discography/DESIGN_SYSTEM.md)
 * **What I did:** Instead of pulling in a heavy framework like Tailwind or relying on AI-generated inline styles, I designed a complete CSS variable token system from scratch. It handles three dynamic themes (`dark`, `white`, and `sunset`), smooth glassmorphic card overlays (`backdrop-filter`), and Japanese typography pairings (`Instrument Serif`, `Noto Serif JP`, and `DM Sans`).
 
 ### B. Supabase Graceful Fallback & Offline Resilience Layer
@@ -68,7 +68,7 @@ Here are two genuine examples of how I prompted the AI, what it got wrong or inc
 ### Example 1: Avoiding Messy Inline Styles in the Design System
 * **My Prompt:** *"I want a late-night Tokyo City Pop vibe with dark glassmorphism panels, subtle gold accents, and multi-theme support (night, day, sunset). How should I set this up?"*
 * **What the AI gave me:** It suggested dumping messy inline `style={{ ... }}` props all over my JSX components and hardcoding hex colors directly into divs.
-* **How I fixed it:** I rejected the inline styles completely. Instead, I created a clean CSS custom property architecture in [`src/index.css`](file:///c:/Flutter%20act/citypop-discography/src/index.css) and documented the whole palette in [`DOTON_DESIGN_SYSTEM.md`](file:///c:/Flutter%20act/citypop-discography/DOTON_DESIGN_SYSTEM.md) so changing themes only requires swapping a single data attribute on the `<body>`.
+* **How I fixed it:** I rejected the inline styles completely. Instead, I created a clean CSS custom property architecture in [`src/index.css`](file:///c:/Flutter%20act/citypop-discography/src/index.css) and documented the whole palette in [`DESIGN_SYSTEM.md`](file:///c:/Flutter%20act/citypop-discography/DESIGN_SYSTEM.md) so changing themes only requires swapping a single data attribute on the `<body>`.
 
 ### Example 2: Handling Supabase Configuration & Missing Keys
 * **My Prompt:** *"If someone clones my repo and runs npm run dev without a Supabase account, how do I prevent the site from showing blank pages and crashing?"*
