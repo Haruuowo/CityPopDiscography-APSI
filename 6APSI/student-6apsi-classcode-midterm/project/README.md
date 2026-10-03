@@ -8,7 +8,7 @@ A curated full-stack web application and discography vault for 1970s–1980s Jap
 
 > **This deployment is running in demo mode by default.** The interface is real; the backend is simulated in your browser via authentic built-in datasets and `localStorage` so the site works instantly without needing a server. See [Demo mode](#demo-mode) below.
 
-![A screenshot of the main screen](../../../docs/assets/2026-10-04_12-30-54.png)
+![A screenshot of the main screen](../../../docs/assets/ss.png)
 
 ## What it does
 
@@ -20,7 +20,7 @@ A curated full-stack web application and discography vault for 1970s–1980s Jap
 
 ## Built with
 
-React and Vite on the front end, Supabase (PostgreSQL) on the back end, dynamic iTunes Search API for audio previews, and hand-crafted Vanilla CSS design tokens. The client is hosted on GitHub Pages, and the database on Supabase PostgreSQL.
+React and Vite on the front end, Supabase (PostgreSQL) on the back end, a custom Apple Music / iTunes Search API audio resolver (engineered to replace deprecated Spotify preview endpoints), and hand-crafted Vanilla CSS design tokens with authentic collage assets adapted from prior web portfolio coursework. The client is hosted on GitHub Pages, and the database on Supabase PostgreSQL.
 
 ## Demo mode
 
