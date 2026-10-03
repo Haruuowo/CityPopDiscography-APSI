@@ -60,7 +60,7 @@ export default function AddRecModal({ isOpen, onClose, initialAlbum, onSubmitRec
         </button>
 
         <div className="hero-tag" style={{ marginBottom: '6px' }}>★ COMMUNITY RECOMMENDATION</div>
-        <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.8rem', fontWeight: 800, color: 'var(--white)', marginBottom: '4px' }}>
+        <h2 style={{ fontFamily: 'Instrument Serif, Georgia, serif', fontSize: '2rem', fontWeight: 400, color: 'var(--white)', marginBottom: '4px' }}>
           Recommend an Album
         </h2>
         <p style={{ fontSize: '.88rem', color: 'var(--muted)', marginBottom: '24px' }}>

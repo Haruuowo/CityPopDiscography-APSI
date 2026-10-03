@@ -51,23 +51,23 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
         {!submitted ? (
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--gold)', marginBottom: '6px' }}>
-              <Music2 size={18} />
-              <span style={{ fontFamily: 'Syne, sans-serif', fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              <Music2 size={16} />
+              <span style={{ fontFamily: 'DM Sans, sans-serif', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase' }}>
                 CURATION REQUEST
               </span>
             </div>
 
-            <h2 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.5rem', color: '#fff', marginBottom: '8px', fontWeight: 800 }}>
+            <h2 style={{ fontFamily: 'Instrument Serif, Georgia, serif', fontSize: '1.9rem', color: 'var(--white)', marginBottom: '8px', fontWeight: 400 }}>
               Ask What Album To Add Next
             </h2>
 
-            <p style={{ fontSize: '0.88rem', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '20px', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--muted)', marginBottom: '20px', lineHeight: 1.6 }}>
               Have an iconic 70s or 80s City Pop, Funk, or AOR album you want included in our discography? Tell us below and our curation team will review it!
             </p>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--gold)', fontWeight: 700, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '0.72rem', color: 'var(--gold)', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600, marginBottom: '6px' }}>
                   ALBUM TITLE *
                 </label>
                 <input
@@ -77,12 +77,11 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
                   onChange={(e) => setAlbumTitle(e.target.value)}
                   required
                   className="contact-magenta-input"
-                  style={{ background: '#1e1e24', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--gold)', fontWeight: 700, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '0.72rem', color: 'var(--gold)', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600, marginBottom: '6px' }}>
                   ARTIST / BAND NAME *
                 </label>
                 <input
@@ -92,12 +91,11 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
                   onChange={(e) => setArtist(e.target.value)}
                   required
                   className="contact-magenta-input"
-                  style={{ background: '#1e1e24', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', fontWeight: 500, marginBottom: '6px' }}>
                   YOUR EMAIL (Optional - to notify you when added)
                 </label>
                 <input
@@ -106,12 +104,11 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
                   value={userEmail}
                   onChange={(e) => setUserEmail(e.target.value)}
                   className="contact-magenta-input"
-                  style={{ background: '#1e1e24', color: '#fff', borderColor: 'rgba(255,255,255,0.2)' }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'rgba(255,255,255,0.8)', fontWeight: 600, marginBottom: '6px' }}>
+                <label style={{ display: 'block', fontSize: '0.72rem', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', fontWeight: 500, marginBottom: '6px' }}>
                   WHY SHOULD WE ADD THIS ALBUM? (Optional)
                 </label>
                 <textarea
@@ -120,7 +117,7 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   className="contact-magenta-input"
-                  style={{ background: '#1e1e24', color: '#fff', borderColor: 'rgba(255,255,255,0.2)', resize: 'vertical' }}
+                  style={{ resize: 'vertical' }}
                 />
               </div>
 
@@ -128,7 +125,7 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
                 <button type="button" onClick={handleReset} className="btn-line">
                   Cancel
                 </button>
-                <button type="submit" className="btn-solid" style={{ background: '#B91C1C' }}>
+                <button type="submit" className="btn-solid">
                   <Send size={14} /> Send Album Suggestion
                 </button>
               </div>
@@ -137,7 +134,7 @@ export default function SuggestAlbumModal({ isOpen, onClose }) {
         ) : (
           <div style={{ textAlign: 'center', padding: '20px 0' }}>
             <CheckCircle2 style={{ width: '48px', height: '48px', color: '#4ade80', margin: '0 auto 16px' }} />
-            <h3 style={{ fontFamily: 'Syne, sans-serif', fontSize: '1.4rem', color: '#fff', marginBottom: '8px' }}>
+            <h3 style={{ fontFamily: 'Instrument Serif, Georgia, serif', fontSize: '1.8rem', color: '#fff', marginBottom: '8px', fontWeight: 400 }}>
               Request Received!
             </h3>
             <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.85)', marginBottom: '24px', lineHeight: 1.5 }}>

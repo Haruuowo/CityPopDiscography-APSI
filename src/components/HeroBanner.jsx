@@ -74,9 +74,14 @@ export default function HeroBanner({ onOpenAddRec, onOpenSuggestAlbum, initialVi
         <div className="hero-content-wrapper">
           <div className="hero-title-box">
             <div className="hero-tag">
-              ★ JAPANESE CITY POP DISCOGRAPHY · 1975 – 1990
+              <span className="hero-tag-jp">シティ・ポップ</span>
+              <span className="hero-tag-rule" aria-hidden="true"></span>
+              <span>Japanese Discography · 1975 – 1990</span>
             </div>
-            <h1>INTRODUCTION TO <span className="gold-accent">CITYPOP</span></h1>
+            <h1>
+              <span className="hero-heading-lead">An introduction to</span>
+              City Pop
+            </h1>
             <p className="hero-sub">
               Immerse yourself in nostalgic Tokyo night drives, coastal synth funk, and golden sunset grooves. Filter by artist, era, or mood, and suggest what albums we should feature next.
             </p>

@@ -24,10 +24,10 @@ export default function Recommendations({ recommendations, onOpenAddRec }) {
 
       {/* Cards Grid or Empty State */}
       {recommendations.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '48px 24px', background: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid var(--border)' }}>
+        <div style={{ textAlign: 'center', padding: '48px 24px', background: 'var(--glass)', borderRadius: '12px', border: '1px solid var(--border)' }}>
           <MessageSquareQuote style={{ width: '36px', height: '36px', color: 'var(--gold)', margin: '0 auto 12px' }} />
-          <h3 style={{ fontFamily: 'Syne, sans-serif', color: '#fff', fontSize: '1.1rem', marginBottom: '6px' }}>No listener recommendations yet</h3>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.88rem', marginBottom: '18px' }}>Be the first listener to share your favorite City Pop album recommendation!</p>
+          <h3 style={{ fontFamily: 'Instrument Serif, Georgia, serif', color: '#fff', fontSize: '1.5rem', fontWeight: 400, marginBottom: '6px' }}>No listener recommendations yet</h3>
+          <p style={{ color: 'var(--muted)', fontSize: '0.88rem', marginBottom: '18px' }}>Be the first listener to share your favorite City Pop album recommendation!</p>
           <button onClick={onOpenAddRec} className="btn-solid">
             <PlusCircle style={{ width: '14px', height: '14px' }} />
             <span>Write First Recommendation</span>
