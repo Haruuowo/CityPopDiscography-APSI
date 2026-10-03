@@ -1,4 +1,4 @@
-# Doton City Pop Discography & Community Vault 🏙️🎵
+#City Pop Discography & Community Vault
 
 [![Full-Stack JavaScript & AI Badge](https://img.shields.io/badge/Badge-Full--Stack%20JS%20%26%20AI-blueviolet)](file:///c:/Flutter%20act/citypop-discography/AI-USAGE.md)
 [![Security Audit](https://img.shields.io/badge/Security-Lockdown%20100%25-success)](file:///c:/Flutter%20act/citypop-discography/SECURITY-CHECKLIST.md)
