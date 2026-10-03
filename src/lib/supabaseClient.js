@@ -141,6 +141,10 @@ export async function postRecommendation(newRec) {
     return { data: newRec, error: null, source: 'local' };
   }
 
+  const resolvedUserName = newRec.userName || newRec.recommendedBy || newRec.user_name || 'Anonymous Listener';
+  const resolvedNote = newRec.note || newRec.comment || newRec.reason || '';
+  const resolvedVibe = newRec.vibe || newRec.vibeTag || 'Midnight Drive';
+
   try {
     const { data, error } = await supabase
       .from('recommendations')
@@ -148,9 +152,9 @@ export async function postRecommendation(newRec) {
         {
           album_title: newRec.albumTitle,
           artist: newRec.artist,
-          user_name: newRec.userName || 'Anonymous Listener',
-          note: newRec.note,
-          vibe: newRec.vibe || 'Midnight Drive',
+          user_name: resolvedUserName,
+          note: resolvedNote,
+          vibe: resolvedVibe,
           rating: newRec.rating || 5.0,
         },
       ])

@@ -40,9 +40,12 @@ export default function AddRecModal({ isOpen, onClose, initialAlbum, onSubmitRec
       albumTitle: formData.albumTitle.trim(),
       artist: formData.artist.trim(),
       year: Number(formData.year),
+      userName: formData.recommendedBy.trim(),
       recommendedBy: formData.recommendedBy.trim(),
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      note: formData.comment.trim(),
       comment: formData.comment.trim(),
+      vibe: formData.vibeTag,
       vibeTag: formData.vibeTag,
       date: new Date().toISOString().split('T')[0]
     };
