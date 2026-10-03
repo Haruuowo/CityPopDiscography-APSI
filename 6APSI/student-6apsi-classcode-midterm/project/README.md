@@ -1,208 +1,174 @@
-# City Pop Discography & Community Vault 🏙️🎵
+# City Pop Discography & Community Vault
 
-[![Full-Stack JavaScript & AI Badge](https://img.shields.io/badge/Badge-Full--Stack%20JS%20%26%20AI-blueviolet)](file:///c:/Flutter%20act/citypop-discography/AI-USAGE.md)
-[![Security Audit](https://img.shields.io/badge/Security-Lockdown%20100%25-success)](file:///c:/Flutter%20act/citypop-discography/SECURITY-CHECKLIST.md)
-[![Database](https://img.shields.io/badge/Database-Supabase%20PostgreSQL-emerald)](file:///c:/Flutter%20act/citypop-discography/supabase/schema.sql)
+A curated full-stack web application and discography vault for 1970s–1980s Japanese City Pop, Funk, and AOR vinyl records, allowing retro music enthusiasts to discover albums by vibe, listen to continuous 30-second audio previews, and share community recommendations.
 
-> **Public GitHub Repository:** [Haruuowo/CityPopDiscography-APSI](https://github.com/Haruuowo/CityPopDiscography-APSI)  
-> **Course Code:** 6APSI — Final Project Submission  
-> **Workspace Copy:** `6APSI/student-6apsi-classcode-midterm/project/README.md`  
+**Live site:** https://haruuowo.github.io/CityPopDiscography-APSI/  
+**API:** https://your-project-ref.supabase.co  
+**Demo video:** [Video Presentation Walkthrough](../../../presentation/VIDEO_SCRIPT.md)
 
----
+> **This deployment is running in demo mode by default.** The interface is real; the backend is simulated in your browser via authentic built-in datasets and `localStorage` so the site works instantly without needing a server. See [Demo mode](#demo-mode) below.
 
-## 1. Overview
+![A screenshot of the main screen](../../../docs/assets/screenshot.png)
 
-**City Pop Vault** is an interactive full-stack web application created to preserve, showcase, and celebrate 1970s and 1980s Japanese City Pop, Funk, AOR, and Boogie vinyl albums. 
+## What it does
 
-The application solves the problem of discovering rare Japanese vinyl music by offering a centralized, curated digital sanctuary where music enthusiasts can filter records by mood or vibe, play continuous 30-second audio previews across viewports, explore authentic high-res album covers, and request new album additions. It is built for retro music lovers, vinyl collectors, and fans of late-night Tokyo aesthetic culture.
+- Explore, search, and filter 21+ authentic 1970s–1980s Japanese City Pop vinyl albums by artist, release year, rating, and mood/vibe tags
+- Listen to continuous 30-second audio previews with a persistent bottom HTML5 player that plays uninterrupted across themes, filters, and modals
+- Submit community album reviews and recommendations with real-time UI updates and data persistence
+- Request new albums to be added to the vault via the interactive "Ask what album to add next" modal
+- Switch between 3 handcrafted visual themes (Night, Day, Sunset) built with pure Vanilla CSS glassmorphism and Japanese typography tokens
 
----
+## Built with
 
-## 2. Setup and Installation
+React and Vite on the front end, Supabase (PostgreSQL) on the back end, dynamic iTunes Search API for audio previews, and hand-crafted Vanilla CSS design tokens. The client is hosted on GitHub Pages, and the database on Supabase PostgreSQL.
 
-Follow these steps in order to set up and run the project from scratch on your local machine:
+## Demo mode
 
-### Step 1: Prerequisites & Tooling
-Make sure you have the following installed on your operating system:
-* **Node.js**: `v18.0.0` or higher (Recommended: Node `v20.x` or `v24.x`)
-* **npm**: `v9.0.0` or higher (comes bundled with Node.js)
-* **Git**: `v2.x` or higher
+This repository can run two ways, determined automatically by your environment variables at build or runtime.
 
-### Step 2: Clone the Repository
-Open your terminal or command prompt and clone the project repository:
+**Demo mode is the default.** If Supabase credentials are unset or left as placeholders, the application activates its built-in resilience layer (`supabaseClient.js`), falling back to local datasets with full functionality.
+
+| Environment Configuration | What happens |
+| --- | --- |
+| `VITE_SUPABASE_URL` unset or placeholder | The client answers its own requests from local state and `localStorage`. No server, no database setup required. This ensures the GitHub Pages link and local clones work out-of-the-box on day one. |
+| `VITE_SUPABASE_URL` & `ANON_KEY` provided | The client connects directly to live Supabase PostgreSQL tables (`albums`, `tracks`, `recommendations`, `subscribers`) with Row Level Security (RLS). |
+
+**Demo mode is a starting point and a fallback, not a limitation.** It guarantees zero-downtime resilience during presentations or offline reviews while supporting full cloud database integration when credentials are provided.
+
+| Piece | Provider / Host |
+| --- | --- |
+| **Client** | GitHub Pages (Automated via GitHub Actions) |
+| **Database** | Supabase (Managed PostgreSQL with Row-Level Security) |
+| **Audio Previews** | Dynamic iTunes / Apple Music Search API Resolver |
+
+## Running it yourself
+
+**The client only, in demo mode.** No external database needed.
+
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Haruuowo/CityPopDiscography-APSI.git
 cd CityPopDiscography-APSI
-```
 
-### Step 3: Install Project Dependencies
-Install all required Node.js packages (`react`, `react-dom`, `@supabase/supabase-js`, `lucide-react`, `vite`):
-```bash
+# 2. Install dependencies
 npm install
+
+# 3. Start local development server
+npm run dev                 # http://localhost:5173
 ```
 
-### Step 4: Environment and Configuration
-The project uses environment variables to communicate securely with Supabase. 
-> ⚠️ **Security Notice:** Never commit real API keys or credentials to public git repositories. Real keys are stored in `.env`, which is strictly ignored by `.gitignore`.
-
-1. Copy the sanitized template file `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-2. Open `.env` in your code editor and populate your environment variables:
-   ```env
-   # Supabase Credentials (Required for Cloud Sync; fallback active if unconfigured)
-   VITE_SUPABASE_URL=https://your-project-ref.supabase.co
-   VITE_SUPABASE_ANON_KEY=your-anon-key-here
-   ```
-   *(Note: If Supabase keys are omitted or invalid, the application automatically falls back to the built-in local dataset `citypopData.js` without breaking).*
-
-### Step 5: Database Setup and Seeding (Supabase PostgreSQL)
-1. Log into your **[Supabase Console](https://supabase.com/dashboard)** and create a new project.
-2. Navigate to **SQL Editor** $\rightarrow$ **New Query**.
-3. Open [`supabase/schema.sql`](file:///c:/Flutter%20act/citypop-discography/supabase/schema.sql) from this repository, copy its contents, paste into the SQL Editor, and click **Run**.
-4. This script automatically creates the `albums`, `tracks`, `recommendations`, and `subscribers` tables, configures foreign key relationships, enables Row Level Security (RLS), and seeds the initial 21 authentic Japanese vinyl albums.
-
----
-
-## 3. How to Run It
-
-Start the Vite local development server by executing:
+**The whole stack with Supabase PostgreSQL.**
 
 ```bash
+# 1. Clone and install
+git clone https://github.com/Haruuowo/CityPopDiscography-APSI.git
+cd CityPopDiscography-APSI
+npm install
+
+# 2. Set up database in Supabase Console
+#    - Open https://supabase.com/dashboard and create a project
+#    - Navigate to SQL Editor -> New Query
+#    - Run supabase/schema.sql to create tables and seed 21 albums
+
+# 3. Configure environment variables
+cp .env.example .env
+# Edit .env and enter your VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+
+# 4. Start the application
 npm run dev
 ```
 
-### Expected Output & First Screen
-When the development server starts, your terminal will display:
-```
-  VITE v6.4.3  ready in 1200 ms
+Check the client build and health before deployment:
 
-  ➜  Local:   http://localhost:5173/
-  ➜  Network: use --host to expose
+```bash
+npm run build               # validates production bundle compilation
+npm run preview             # previews production build locally
 ```
 
-Open **`http://localhost:5173/`** in your browser. You should see:
-- Sticky glassmorphic header navigation with theme switcher dropdown.
-- Full-width hero banner with a 500px featured YouTube video player (`https://youtu.be/VtRIRJ0tBRc`), project description, and newsletter subscription box.
-- *"This week's Recommendation!"* 4-column album ribbon.
-- Interactive Filter Bar and live album counter badge (**Showing 21 of 21 Albums**).
-- 21 authentic vinyl album cards with high-res cover art, release year, ratings, and genre tags.
+## Environment variables
 
----
+None of these are committed. `.env.example` in the root folder lists them with placeholder values.
 
-## 4. Features and Usage
+| Name | Where | What it is |
+| --- | --- | --- |
+| `VITE_SUPABASE_URL` | client, at build time | Supabase project API URL (e.g. `https://xyz.supabase.co`) |
+| `VITE_SUPABASE_ANON_KEY` | client, at build time | Supabase public anonymous API key |
 
-### Primary User Flow Walkthrough
+Every `VITE_` value is compiled into the built JavaScript and is **public**. Never put a database secret or master service-role key in client environment variables.
 
-1. **Multi-Theme Switching (Night, Day, Sunset)**:
-   - Click the theme selector dropdown in the top-right header to switch between **Night mode** (dark glassmorphism), **Day mode** (warm light tone), and **Sunset mode** (deep orange-amber glow).
+## Deploying
 
-2. **Album Filtering & Instant Search**:
-   - Use the search bar to search albums by title, artist name, or song titles.
-   - Select an artist filter (e.g. *Anri*, *Taeko Ohnuki*, *Toshiki Kadomatsu*) or vibe tag (e.g. *Midnight Drive*, *Beach Sunset*, *Boogie*).
-   - Change sorting criteria (*Highest Rating*, *Newest First*, *Oldest First*, *Alphabetical*).
+**Client, to GitHub Pages.** Configured via GitHub Actions:
 
-3. **Persistent HTML5 Audio Player**:
-   - Click **View →** on any album card or open the album detail modal.
-   - Click the play button next to any track. The persistent bottom audio player bar will appear and play a 30-second audio preview.
-   - Navigate across filters, switch themes, or open modals while playback continues uninterrupted in the background.
+1. Under **Settings > Pages > Build and deployment > Source**, select **GitHub Actions**.
+2. If using Supabase in production, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` under **Settings > Secrets and variables > Actions > Variables**.
+3. Push to `main` branch to trigger automated build and deployment.
 
-4. **Featured Video Header & Newsletter Subscription**:
-   - Watch the featured City Pop YouTube stream in the header section.
-   - Enter your email address in the newsletter form to receive weekly discography updates. The app validates email syntax, persists subscriptions in `localStorage`, and syncs to Supabase `subscribers`.
+**Database (Supabase PostgreSQL).** 
+1. Create a project on [Supabase](https://supabase.com).
+2. Execute [`supabase/schema.sql`](../../../supabase/schema.sql) in the Supabase SQL Editor. This initializes all tables, constraints, Row Level Security (RLS) policies, and seed data.
 
-5. **Ask What Album To Add Next Modal (`SuggestAlbumModal`)**:
-   - Click the **"Ask what album to add next"** button in the hero or header section.
-   - Enter your suggested album title, artist, notes, and optional contact email. The modal submits your request and offers a direct `mailto:CityRecords@gmail.com` dispatch option.
-
-6. **Community Recommendations**:
-   - Share reviews and recommendations for your favorite albums. Submissions update the UI in real time and store to Supabase / `localStorage`.
-
-### Database Tables & Endpoints
-
-| Database Table / Path | Method | Purpose & Action |
-| :--- | :---: | :--- |
-| `albums` | `SELECT` | Fetches full album catalog ordered by rating or release year. |
-| `tracks` | `SELECT` | Fetches tracklists, track numbers, highlight flags, and audio preview URLs. |
-| `recommendations` | `SELECT` / `INSERT` | Fetches community listener reviews and posts new user recommendations. |
-| `subscribers` | `INSERT` | Records new newsletter subscriber emails and subscription timestamps. |
-
----
-
-## 5. Project Structure
+## Project structure
 
 ```
 citypop-discography/
-├── .env.example              # Environment variables template with placeholders
-├── .gitignore                 # Excludes .env, node_modules, dist
-├── AI-USAGE.md                # Full-Stack JS & AI Badge disclosure (35% manual code)
-├── SECURITY-CHECKLIST.md     # Pre-public security audit checklist (100% completed)
-├── DESIGN_SYSTEM.md           # Custom Vanilla CSS design system property tokens
-├── README.md                  # Root documentation guide
-├── REPORT.md                  # Project Increment Report
-├── Project_Increment_Report.pdf # Formatted PDF increment report artifact
-├── 6APSI/
-│   └── student-6apsi-classcode-midterm/
-│       ├── project/
-│       │   ├── README.md              # Workspace copy of project README
-│       │   ├── REPORT.md              # Workspace Project Increment Report
-│       │   ├── SECURITY-CHECKLIST.md  # Workspace Security Checklist
-│       │   ├── AI-USAGE.md            # Workspace AI Usage Disclosure
-│       │   └── Project_Increment_Report.pdf
-│       └── journal/
-│           ├── WEEK1_JOURNAL.md       # Week 1 Reflection Journal
-│           └── WEEK2_JOURNAL.md       # Week 2 Reflection Journal
+├── .env.example          # Environment variables template with placeholders
+├── .gitignore            # Git exclusion rules (isolates .env and dependencies)
+├── AI-USAGE.md           # Full-Stack JS & AI badge craftsmanship disclosure
+├── SECURITY-CHECKLIST.md # Pre-release security audit checklist
+├── DESIGN_SYSTEM.md      # Custom Vanilla CSS design tokens & typography specs
+├── LICENSE               # MIT Open Source License
+├── package.json          # Node dependencies and project scripts
+├── docs/
+│   └── assets/           # Application screenshots and documentation media
+├── presentation/
+│   ├── SLIDES.md         # Final presentation slides
+│   └── VIDEO_SCRIPT.md   # 3-5 minute demonstration video script
+├── public/
+│   ├── assets/           # Local cover artwork and backdrop media
+│   └── square_graphic.jpg# High-res social preview card
 ├── src/
-│   ├── components/            # Header, HeroBanner, FilterBar, AudioPlayerBar, SuggestAlbumModal, AddRecModal, etc.
-│   ├── data/                  # Authentic Japanese City Pop datasets (citypopData.js)
-│   ├── lib/                   # Supabase client & fallback resilience layer (supabaseClient.js)
-│   ├── utils/                 # Dynamic iTunes / Apple Music audio resolver (audioResolver.js)
-│   ├── App.jsx                # Main React application & Audio Context controller
-│   └── index.css              # Hand-crafted CSS design system tokens
+│   ├── components/       # Header, HeroBanner, FilterBar, AudioPlayerBar, Modals
+│   ├── data/             # Authentic Japanese City Pop datasets (initialAlbums.js)
+│   ├── lib/              # Supabase client & fallback resilience layer
+│   ├── utils/            # Dynamic iTunes / Apple Music audio resolver
+│   ├── App.jsx           # Root application & audio context state coordinator
+│   └── index.css         # Glassmorphic CSS design system and theme variables
 └── supabase/
-    └── schema.sql             # PostgreSQL tables, relations, constraints, and RLS policies
+    └── schema.sql        # PostgreSQL schema, relations, and RLS security policies
 ```
 
----
+## Architecture
 
-## 6. Screenshots
+```mermaid
+graph TD
+    User([User Browser]) <--> ReactClient[React + Vite Frontend\nHosted on GitHub Pages]
+    ReactClient <-->|Dynamic Search & Preview Stream| iTunesAPI[Apple Music / iTunes API]
+    ReactClient <-->|Live Cloud Sync / RLS Queries| SupabasePG[(Supabase PostgreSQL\nAlbums, Tracks, Recs)]
+    ReactClient -.->|Offline / Fallback Resilience| LocalStore[(Local Storage &\nStatic Seed Dataset)]
+```
 
-### Main Application Dashboard & Video Hero Banner
-![City Pop Vault Main Interface](file:///c:/Flutter%20act/citypop-discography/presentation/assets/hero_banner_preview.png)
+The application is built as a single-page React frontend deployed to GitHub Pages. It communicates directly with Supabase PostgreSQL via parameterized REST queries protected by Row-Level Security policies. Audio previews are resolved on-the-fly using the iTunes Search API, while an integrated local fallback system guarantees continuous functionality even if cloud endpoints are unavailable.
 
-### Album Grid & Filtering Interface
-![Album Grid & Filter Controls](file:///c:/Flutter%20act/citypop-discography/presentation/assets/album_grid_preview.png)
+## What I would do next
 
-### Persistent Audio Player Bar & Track Playback
-![Persistent Bottom Audio Player](file:///c:/Flutter%20act/citypop-discography/presentation/assets/audio_player_preview.png)
+- **User Authentication & Custom Crates:** Integrate Supabase Auth so users can sign up, create custom vinyl crates/playlists, and save favorite albums across devices.
+- **Full Spotify Web Playback SDK Integration:** Implement Spotify OAuth token authorization to allow Spotify Premium subscribers to stream full tracks directly inside the app.
+- **Community Upvoting & Discussion Threads:** Expand the community recommendation vault with upvoting/downvoting mechanics and nested comment threads for vinyl collectors.
 
----
+## Author
 
-## 7. Known Issues and Next Steps
+**Haruuowo** — [GitHub Profile](https://github.com/Haruuowo)  
+**Course:** 6APSI — Final Project Submission
 
-### Honest Assessment of Known Issues
-1. **Audio Preview Region Availability**: 30-second audio previews rely on the Apple Music / iTunes Search API. A few rare Japanese regional master releases may occasionally experience regional playback restrictions or fallback to search lookup.
-2. **Spotify Integration Limitations**: Clicking "Spotify ↗" in the audio player redirects to Spotify search (`open.spotify.com/search/...`) rather than direct embedded playback, because full Web Playback SDK streaming requires active user OAuth authentication.
+## AI use
 
-### Planned Next Steps
-- **User Authentication**: Add user login and profile management via Supabase Auth so users can bookmark favorite albums and build custom playlists.
-- **Full Spotify Web API OAuth**: Implement full OAuth token exchange to enable full-track playback via Spotify Web Playback SDK for Premium Spotify subscribers.
+![Built with AI assistance](https://img.shields.io/badge/built%20with-AI%20assistance-0b5fff)
 
----
+This project was built using **Gemini / Claude / Cursor** as an active pair-programming assistant for boilerplate generation, data formatting, and error diagnosis, with **35% self-authored handwritten code** covering the custom CSS design system, dynamic audio preview resolver, Supabase offline fallback resilience layer, and SQL Row-Level Security policies.
 
-## 8. Security Checklist Confirmation
+Full line-by-line disclosures, prompt records, and technical breakdowns are documented in [AI-USAGE.md](AI-USAGE.md).
 
-This repository includes a fully completed [`SECURITY-CHECKLIST.md`](file:///c:/Flutter%20act/citypop-discography/SECURITY-CHECKLIST.md) in the project directory prior to public release. All 13 security items (including `.env` git isolation, clean commit history, Supabase Row Level Security policies, and parameterized queries) have been verified and documented with empirical evidence.
+## Licence
 
----
-
-## 9. AI Usage Credit Line
-
-> 🤖 **AI Credit Disclosure:** This project was developed following the **Full-Stack JavaScript and AI Badge** guidelines. The codebase achieves a **35% Self-Authored Code / 65% AI-Assisted Code** distribution. Core architecture, design system CSS tokens, dynamic audio resolver algorithms, Supabase fallback resilience logic, and SQL RLS policies were manually engineered. For line-by-line file references and prompt logs, see [`AI-USAGE.md`](file:///c:/Flutter%20act/citypop-discography/AI-USAGE.md).
-
----
-
-## 📜 License & Acknowledgments
-
-Academic submission for course **6APSI**. Album cover artwork and audio preview clips belong to their respective copyright holders and are used under non-commercial educational fair use guidelines.
+MIT, see [LICENSE](../../../LICENSE).
