@@ -8,7 +8,7 @@ A curated full-stack web application and discography vault for 1970s–1980s Jap
 
 > **This deployment is running in demo mode by default.** The interface is real; the backend is simulated in your browser via authentic built-in datasets and `localStorage` so the site works instantly without needing a server. See [Demo mode](#demo-mode) below.
 
-![A screenshot of the main screen](docs/assets/screenshot.png)
+![A screenshot of the main screen](docs/assets/ss.png)
 
 ## What it does
 
