@@ -111,19 +111,21 @@ export async function fetchRecommendations() {
       return { data: INITIAL_RECOMMENDATIONS, error, source: 'local' };
     }
 
-    // Filter out old sample seed reviews so the community section starts clean
-    const realSubmissions = data.filter(rec => !SAMPLE_SEED_USERNAMES.includes(rec.user_name));
-
-    const formattedRecs = realSubmissions.map((rec) => ({
+    const targetRows = data.length > 0 ? data : [];
+    const formattedRecs = targetRows.map((rec) => ({
       id: rec.id,
-      albumTitle: rec.album_title,
+      albumTitle: rec.album_title || rec.albumTitle,
       artist: rec.artist,
-      userName: rec.user_name || 'Anonymous Listener',
-      note: rec.note,
+      userName: rec.user_name || rec.userName || 'Anonymous Listener',
+      note: rec.note || rec.comment || rec.reason,
       vibe: rec.vibe || 'Midnight Drive',
       rating: Number(rec.rating || 5.0),
       createdAt: rec.created_at,
     }));
+
+    if (formattedRecs.length === 0) {
+      return { data: INITIAL_RECOMMENDATIONS, error: null, source: 'local' };
+    }
 
     return { data: formattedRecs, error: null, source: 'supabase' };
   } catch (err) {
