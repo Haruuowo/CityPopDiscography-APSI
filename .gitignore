@@ -23,4 +23,8 @@ dist-ssr
 *.ntvsca
 *.njsproj
 *.sln
-*.sw?
+# Microsoft Office temporary lock files
+~$*
+
+# Scratch & temporary helper scripts
+scratch/

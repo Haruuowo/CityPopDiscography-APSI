@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>City Pop Vault - 6APSI Final Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0d14;
+      --card-bg: rgba(22, 26, 40, 0.85);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-pink: #ff2a6d;
+      --accent-cyan: #05d9e8;
+      --accent-purple: #d300c5;
+      --text-main: #f0f3fa;
+      --text-muted: #9ba3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header.top-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(11, 13, 20, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.05);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    .presentation-container {
+      margin-top: 64px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 24px 100px;
+      max-width: 1380px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+
+    .slide-wrapper {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 44px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      margin-bottom: 48px;
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 6px; height: 100%;
+      background: linear-gradient(to bottom, var(--accent-pink), var(--accent-cyan));
+    }
+
+    .slide-header {
+      margin-bottom: 28px;
+    }
+
+    .slide-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .slide-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .slide-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    @media (max-width: 980px) {
+      .slide-grid { grid-template-columns: 1fr; }
+    }
+
+    .slide-content ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .slide-content li {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: #d1d6e6;
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .slide-content li::before {
+      content: '-';
+      position: absolute;
+      left: 0;
+      color: var(--accent-pink);
+      font-weight: bold;
+    }
+
+    .slide-content strong {
+      color: #fff;
+    }
+
+    .image-preview-frame {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      background: #000;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .image-preview-frame:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 45px rgba(5, 217, 232, 0.2);
+    }
+
+    .image-preview-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .image-caption {
+      padding: 10px 14px;
+      background: #111420;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .download-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(11, 13, 20, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border);
+      padding: 14px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .btn-pptx {
+      background: linear-gradient(135deg, var(--accent-pink), var(--accent-purple));
+      color: #fff;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 30px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(255, 42, 109, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-pptx:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(255, 42, 109, 0.6);
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(5, 217, 232, 0.12);
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-nav">
+    <div class="brand-title">CITY POP VAULT - 6APSI PRESENTATION DECK</div>
+    <div class="slide-counter">7 SLIDES (EASY TO UNDERSTAND)</div>
+  </header>
+
+  <main class="presentation-container">
+
+    <!-- Slide 1 -->
+    <section class="slide-wrapper" id="slide-1">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 01 / 07 - Title &amp; Overview</div>
+        <h2 class="slide-title">City Pop Vault - Simple Web App to Explore Retro Japanese Vinyl</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>What is it in simple words:</strong> An interactive website where music fans can discover classic 1970s-80s Japanese City Pop albums, listen to instant 30-second song clips, change visual themes, and share their favorite recommendations to a live public list.</li>
+            <li><strong>Built With:</strong> React (Website Interface) and Supabase (Online Cloud Database).</li>
+            <li><strong>Presenter:</strong> Student Capstone Presentation (Course 6APSI).</li>
+          </ul>
+          <div class="badge-pill">Production Ready &amp; Certified</div>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/01_web_dark_hero.png" alt="City Pop Vault Dark Theme Hero Screenshot">
+          <div class="image-caption">
+            <span>WEBSITE: Dark Theme Hero &amp; Vinyl Player</span>
+            <span>01_web_dark_hero.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2 -->
+    <section class="slide-wrapper" id="slide-2">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 02 / 07 - The Problem &amp; Our Solution</div>
+        <h2 class="slide-title">Why We Built It: The Problem &amp; Our Solution</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>The Problem for Everyday Listeners:</strong> Vintage Japanese music is scattered all over old forums, making it hard to find good songs. Most music sites do not let you browse by mood (like Night Drive or Beach Sunset), and preview buttons on other sites are often broken.</li>
+            <li><strong>Our Simple Solution:</strong> One clean website where you can search albums by mood, listen to uninterrupted 30-second song previews, and submit recommendations to a live online board.</li>
+          </ul>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/03_web_discography_grid.png" alt="Discography Grid & Search Filter">
+          <div class="image-caption">
+            <span>WEBSITE: Grid Filter &amp; Album Vault</span>
+            <span>03_web_discography_grid.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3 -->
+    <section class="slide-wrapper" id="slide-3">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 03 / 07 - How The App Works</div>
+        <h2 class="slide-title">How The App Works: Simple Building Blocks</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>Frontend (What You See):</strong> Built with React. Includes 3 visual color themes (Dark Mode, Sunset, Daylight) that switch instantly.</li>
+            <li><strong>Online Database (Where Info Lives):</strong> Supabase cloud database safely stores albums, track lists, and community posts.</li>
+            <li><strong>Smart Music Player:</strong> Automatically finds and plays official 30-second audio previews from Apple Music and iTunes.</li>
+            <li><strong>Offline Backup Protection:</strong> If the internet drops or the database is slow, the site automatically switches to a backup list so it never crashes.</li>
+          </ul>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/09_ide_supabase_client.png" alt="IDE Supabase Client Architecture">
+          <div class="image-caption">
+            <span>IDE: supabaseClient.js Offline Backup System</span>
+            <span>09_ide_supabase_client.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4 -->
+    <section class="slide-wrapper" id="slide-4">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 04 / 07 - Keeping The App Safe</div>
+        <h2 class="slide-title">Keeping The App Safe &amp; Secure</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>Hidden Passwords:</strong> All database keys and secret credentials are kept in a hidden <code>.env</code> file and never uploaded to public GitHub.</li>
+            <li><strong>Clean Project History:</strong> Full commit history audit verified zero passwords or keys were ever exposed.</li>
+            <li><strong>Safe Database Permissions:</strong> Visitors can read albums and post new suggestions, but they cannot delete or alter existing data.</li>
+            <li><strong>Verified Checklist:</strong> Certified all safety and security checks before publishing.</li>
+          </ul>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/11_ide_security_terminal.png" alt="IDE Security Terminal & Git Clean Check">
+          <div class="image-caption">
+            <span>IDE: Security Checklist &amp; Terminal Verification</span>
+            <span>11_ide_security_terminal.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5 -->
+    <section class="slide-wrapper" id="slide-5">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 05 / 07 - Problems We Hit &amp; Fixed</div>
+        <h2 class="slide-title">Problems We Hit &amp; How We Fixed Them</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>Problem 1 (Music stopped playing):</strong> Searching or clicking filters reloaded parts of the page and cut off the music. <em>Fix:</em> Moved the audio player to stay fixed at the bottom of the screen so it plays continuously.</li>
+            <li><strong>Problem 2 (Database blocked new suggestions):</strong> The database blocked visitors from submitting new songs. <em>Fix:</em> Added safe public submission rules in the database settings.</li>
+            <li><strong>Problem 3 (Tag formatting error):</strong> Multi-word genres caused database errors. <em>Fix:</em> Cleaned up how genres are formatted before sending to the database.</li>
+          </ul>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/10_ide_audio_player_state.png" alt="IDE Audio Player State Lifting">
+          <div class="image-caption">
+            <span>IDE: AudioPlayerBar.jsx Persistent State</span>
+            <span>10_ide_audio_player_state.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6 -->
+    <section class="slide-wrapper" id="slide-6">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 06 / 07 - Human Code &amp; AI Help</div>
+        <h2 class="slide-title">How We Built It: Human Code &amp; AI Help</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>Work Breakdown:</strong> <strong>35% Hand-Crafted Code / 65% AI-Assisted Code</strong> (Exceeds the 20% minimum manual code rule).</li>
+            <li><strong>What We Coded by Hand:</strong> Custom color themes and visual styling, the continuous bottom audio player bar, the offline backup system, and safe database rules.</li>
+            <li><strong>What AI Helped With:</strong> Generating starter templates, creating sample album lists, and formatting documents.</li>
+          </ul>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/04_web_sunset_theme.png" alt="City Pop Vault Sunset Theme">
+          <div class="image-caption">
+            <span>WEBSITE: Sunset Theme (Custom Styling)</span>
+            <span>04_web_sunset_theme.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 7 -->
+    <section class="slide-wrapper" id="slide-7">
+      <div class="slide-header">
+        <div class="slide-tag">Slide 07 / 07 - Live Demo &amp; Future Plans</div>
+        <h2 class="slide-title">Live Demo &amp; Future Plans</h2>
+      </div>
+      <div class="slide-grid">
+        <div class="slide-content">
+          <ul>
+            <li><strong>What You Can Try in the Demo:</strong>
+              <br>1. <strong>Change Themes:</strong> Switch between Dark Mode, Sunset, and Daylight with one click.
+              <br>2. <strong>Play Music:</strong> Click any song to hear 30-second audio previews that keep playing while you browse.
+              <br>3. <strong>Add Suggestions:</strong> Submit a song recommendation that saves directly to the online database.
+            </li>
+            <li><strong>Future Plans:</strong> User accounts and logins, plus direct links to buy real vinyl records online.</li>
+          </ul>
+        </div>
+        <div class="image-preview-frame">
+          <img src="./screenshots/06_web_community_vault.png" alt="Community Recommendations Vault">
+          <div class="image-caption">
+            <span>WEBSITE: Community Recommendations Vault</span>
+            <span>06_web_community_vault.png</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="download-bar">
+    <div>
+      <strong>Presentation Package:</strong> 7 Slides with Live Website &amp; IDE Screenshots
+    </div>
+    <a href="./CityPop_Vault_Presentation.pptx" download class="btn-pptx">
+      Download PowerPoint (.PPTX)
+    </a>
+  </div>
+
+</body>
+</html>
