@@ -40,7 +40,7 @@ At least six entries. One per real use. Every entry needs a commit link.
 - **Tool:** Gemini
 - **What I asked for:** Help modularizing CSS styles and integrating my custom background collage assets from my past HTML class and portfolio.
 - **What it gave back:** Hardcoded inline style props and duplicated hex colors inside multiple JSX files.
-- **What I kept, what I changed, and why:** Rejected inline styles completely. Built a clean Vanilla CSS custom property token system in `src/index.css` supporting 3 themes (Night, Day, Sunset) and wired up my handcrafted background collage assets (`public/assets/background_images`) and retro typography pairings.
+- **What I kept, what I changed, and why:** Rejected inline styles completely. Built a clean Vanilla CSS custom property token system in `src/index.css` supporting 3 themes (Night, Day, Sunset) and wired up my handcrafted background collage assets (`src/assets/background_images`) and retro typography pairings.
 - **Commit:** https://github.com/Haruuowo/CityPopDiscography-APSI/commit/5d3467a2f47e2a37865f4760a4b57b411a2af4d6
 
 ### 2026-09-27 - YouTube Video Hero Banner & Album Suggestion Modal
@@ -101,7 +101,7 @@ it in your own words.
 
 - **File:** `src/index.css` & `DESIGN_SYSTEM.md` (with Portfolio & HTML Class Asset Reuse)
 - **Commit:** https://github.com/Haruuowo/CityPopDiscography-APSI/commit/5d3467a2f47e2a37865f4760a4b57b411a2af4d6
-- **What it does and why it is built this way:** Hand-crafted 600+ lines of Vanilla CSS implementing a custom multi-theme token system (Night, Day, Sunset), glassmorphic backdrop filters, custom scrollbars, and Japanese serif typography rules. I also brought over and adapted aesthetic collage assets (`public/assets/background_images`) and layout structures I previously developed in my personal web portfolio and earlier HTML coursework.
+- **What it does and why it is built this way:** Hand-crafted 600+ lines of Vanilla CSS implementing a custom multi-theme token system (Night, Day, Sunset), glassmorphic backdrop filters, custom scrollbars, and Japanese serif typography rules. I also brought over and adapted aesthetic collage assets (`src/assets/background_images`) and layout structures I previously developed in my personal web portfolio and earlier HTML coursework.
 
 - **File:** `src/lib/supabaseClient.js`
 - **Commit:** https://github.com/Haruuowo/CityPopDiscography-APSI/commit/2076a3464ce25c6023ce7765060b4cd31705be40
