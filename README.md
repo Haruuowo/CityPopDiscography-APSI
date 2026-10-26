@@ -2,7 +2,7 @@
 
 A curated full-stack web application and discography vault for 1970s–1980s Japanese City Pop, Funk, and AOR vinyl records, allowing retro music enthusiasts to discover albums by vibe, listen to continuous 30-second audio previews, and share community recommendations.
 
-**Live site:** https://haruuowo.github.io/CityPopDiscography-APSI/  
+**Live site:** https://citypop-discography.vercel.app  
 **API:** https://your-project-ref.supabase.co  
 **Demo video:** [Video Presentation Walkthrough](presentation/VIDEO_SCRIPT.md)
 
@@ -21,7 +21,7 @@ A curated full-stack web application and discography vault for 1970s–1980s Jap
 
 ## Built with
 
-React and Vite on the front end, Supabase (PostgreSQL) on the back end, a custom Apple Music / iTunes Search API audio resolver (engineered to replace deprecated Spotify preview endpoints), and hand-crafted Vanilla CSS design tokens with authentic collage assets adapted from prior web portfolio coursework. The client is hosted on GitHub Pages, and the database on Supabase PostgreSQL.
+React and Vite on the front end, Supabase (PostgreSQL) on the back end, a custom Apple Music / iTunes Search API audio resolver (engineered to replace deprecated Spotify preview endpoints), and hand-crafted Vanilla CSS design tokens with authentic collage assets adapted from prior web portfolio coursework. The client is hosted on Vercel, and the database on Supabase PostgreSQL.
 
 ## Demo mode
 
@@ -31,14 +31,14 @@ This repository can run two ways, determined automatically by your environment v
 
 | Environment Configuration | What happens |
 | --- | --- |
-| `VITE_SUPABASE_URL` unset or placeholder | The client answers its own requests from local state and `localStorage`. No server, no database setup required. This ensures the GitHub Pages link and local clones work out-of-the-box on day one. |
+| `VITE_SUPABASE_URL` unset or placeholder | The client answers its own requests from local state and `localStorage`. No server, no database setup required. This ensures the Vercel deployment and local clones work out-of-the-box on day one. |
 | `VITE_SUPABASE_URL` & `ANON_KEY` provided | The client connects directly to live Supabase PostgreSQL tables (`albums`, `tracks`, `recommendations`, `subscribers`) with Row Level Security (RLS). |
 
 **Demo mode is a starting point and a fallback, not a limitation.** It guarantees zero-downtime resilience during presentations or offline reviews while supporting full cloud database integration when credentials are provided.
 
 | Piece | Provider / Host |
 | --- | --- |
-| **Client** | GitHub Pages (Automated via GitHub Actions) |
+| **Client** | Vercel (Continuous Deployment via Git) |
 | **Database** | Supabase (Managed PostgreSQL with Row-Level Security) |
 | **Audio Previews** | Dynamic iTunes / Apple Music Search API Resolver |
 
@@ -99,11 +99,12 @@ Every `VITE_` value is compiled into the built JavaScript and is **public**. Nev
 
 ## Deploying
 
-**Client, to GitHub Pages.** Configured via GitHub Actions:
+**Client, to Vercel.** Continuous Deployment via Git:
 
-1. Under **Settings > Pages > Build and deployment > Source**, select **GitHub Actions**.
-2. If using Supabase in production, add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` under **Settings > Secrets and variables > Actions > Variables**.
-3. Push to `main` branch to trigger automated build and deployment.
+1. Import the repository on [Vercel](https://vercel.com).
+2. Framework Preset will automatically detect **Vite** (Build Command: `npm run build`, Output Directory: `dist`).
+3. Under **Project Settings > Environment Variables**, optionally add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (if omitted or left blank, the application automatically runs in resilient [Demo mode](#demo-mode)).
+4. Every push to the `main` branch automatically triggers an atomic production deployment.
 
 **Database (Supabase PostgreSQL).** 
 1. Create a project on [Supabase](https://supabase.com).
@@ -121,14 +122,17 @@ citypop-discography/
 ├── LICENSE               # MIT Open Source License
 ├── package.json          # Node dependencies and project scripts
 ├── docs/
-│   └── assets/           # Application screenshots and documentation media
+│   └── assets/           # Application screenshots and documentation media (1080x1080.png)
+├── journal/
+│   ├── WEEK1_JOURNAL.md  # Project sprint reflection journal 1
+│   └── WEEK2_JOURNAL.md  # Project sprint reflection journal 2
 ├── presentation/
+│   ├── CityPop_Vault_Presentation.pptx # Slide deck presentation
+│   ├── index.html        # Interactive HTML slide deck viewer
 │   ├── SLIDES.md         # Final presentation slides
-│   └── VIDEO_SCRIPT.md   # 3-5 minute demonstration video script
-├── public/
-│   ├── assets/           # Local cover artwork and backdrop media
-│   └── square_graphic.jpg# High-res social preview card
+│   └── screenshots/      # High-res application & IDE feature captures
 ├── src/
+│   ├── assets/           # Hand-crafted background collage & theme images
 │   ├── components/       # Header, HeroBanner, FilterBar, AudioPlayerBar, Modals
 │   ├── data/             # Authentic Japanese City Pop datasets (initialAlbums.js)
 │   ├── lib/              # Supabase client & fallback resilience layer
@@ -143,13 +147,13 @@ citypop-discography/
 
 ```mermaid
 graph TD
-    User([User Browser]) <--> ReactClient[React + Vite Frontend\nHosted on GitHub Pages]
+    User([User Browser]) <--> ReactClient[React + Vite Frontend\nHosted on Vercel]
     ReactClient <-->|Dynamic Search & Preview Stream| iTunesAPI[Apple Music / iTunes API]
     ReactClient <-->|Live Cloud Sync / RLS Queries| SupabasePG[(Supabase PostgreSQL\nAlbums, Tracks, Recs)]
     ReactClient -.->|Offline / Fallback Resilience| LocalStore[(Local Storage &\nStatic Seed Dataset)]
 ```
 
-The application is built as a single-page React frontend deployed to GitHub Pages. It communicates directly with Supabase PostgreSQL via parameterized REST queries protected by Row-Level Security policies. Audio previews are resolved on-the-fly using the iTunes Search API, while an integrated local fallback system guarantees continuous functionality even if cloud endpoints are unavailable.
+The application is built as a single-page React frontend deployed to Vercel. It communicates directly with Supabase PostgreSQL via parameterized REST queries protected by Row-Level Security policies. Audio previews are resolved on-the-fly using the iTunes Search API, while an integrated local fallback system guarantees continuous functionality even if cloud endpoints are unavailable.
 
 ## What I would do next
 
